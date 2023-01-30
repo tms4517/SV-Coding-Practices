@@ -1,6 +1,6 @@
 
 ## RCS 1of4
-- Objective 1: Become familiar with inspecting the system.
+- Objective 1: Feel familiar with inspecting the system.
 - Objective 2: Give a point of comparison against git.
 - Estimated time: 10 minutes.
 - There's a similar tutorial here: <https://www.madboa.com/geek/rcs/>
