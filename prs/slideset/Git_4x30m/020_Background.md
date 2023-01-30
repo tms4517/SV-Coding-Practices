@@ -96,6 +96,7 @@ Garbage in, garbage out.
 - <https://semver.org/>
 - Specification of version numbering scheme.
 - `<major>.<minor>.<patch>-<pre-release>+<build>`
+- Version numbers and the way they change have convey meaning.
 - Ordering defined to be valid *only* on the major, minor, patch numbers.
 - Used for many/most open-source projects.
 - Used as basis for Nordic's internal IP/HDN releases.

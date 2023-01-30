@@ -22,9 +22,19 @@
 - You have experience in collaboratively developing code.
 - You have experience with some sort of version control before.
 
+... and that you have setup these things before today:
+
+- WiFi access via NORDIC-INTERNAL, or NORDIC-GUEST with GlobalConnect VPN.
+- `/work/<4-letter-username>/` with rwx permissions.
+- SSH access to an interactive CAD machine, usually via ETX.
+
 ## Objectives
 - Understand fundamental mechanics of git.
 - Be comfortable exploring the internals of git repositories.
 - Know how to dig yourself out of common problems with git.
 - Understand interactions between components in Nordic's system.
-- Networking between Nordic's Bristol and Swindon sites.
+- Networking/social between Nordic's Bristol and Swindon sites.
+
+## Roundtable Introductions
+- Who are you?
+- Who am I?
