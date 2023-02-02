@@ -8,8 +8,6 @@
 - Example 3: Merging without conflict.
 - Example 4: Merging with conflict.
 - Example 5: Merging with kdiff3.
-- Example 6: Rebasing.
-- Example 7: Cherry picking.
 
 ## Preliminaries
 1. Examples with IntroProject.
