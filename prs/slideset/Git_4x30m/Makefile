@@ -7,6 +7,22 @@ default: ${PDF}
 ${PDF}: ${SRC_MD}
 	pandoc -t beamer ${SRC_MD} -o ${PDF}
 
+# For each source file containing shell commands, create the name of a target
+# file which can be sourced.
+RE_SHCMD := '^[ ]*- `.*`$$'
+SRC_MD_SHCMD := $(shell grep -El ${RE_SHCMD} ${SRC_MD} | xargs -I{} basename {})
+SH := $(addprefix source/,$(subst .md,.sh,${SRC_MD_SHCMD}))
+
+sh: ${SH}
+
+# Extract commands into files which can be sourced, which is a bit more
+# convenient than typing during a presentation.
+# Commands are always formatted one per line as any-level list items which are
+# delimited by backticks, with nothing else on the line.
+source/%.sh:
+	grep -E ${RE_SHCMD} $*.md | \
+		sed -r 's/.*`(.*)`.*/\1/' > $@
+
 .PHONY: clean
 clean:
 	rm ${PDF}
