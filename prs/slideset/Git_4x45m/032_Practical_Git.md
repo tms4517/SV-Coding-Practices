@@ -35,7 +35,7 @@ Next, let's tell git to manage our files.
 This has two steps (add to the staging area, then the atomic commit).
 
 - `git add foo.txt bar.txt`
-- `git commit -m 'Little message about the changes.'.
+- `git commit -m 'Little message about the changes.'`.
 
 Also different from RCS is that we can always edit our working files.
 
