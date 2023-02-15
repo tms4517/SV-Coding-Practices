@@ -13,11 +13,9 @@
   , [Dogit](https://projecttools.nordicsemi.no/confluence/display/SIG/dogit+reference+documentation)
   , [BitBucket](https://projecttools.nordicsemi.no/bitbucket/dashboard), etc.
 - `1430..1600`  Practical/interactive: Merging.
-- `1600..1730`  Activity: [Mini-golf](https://bristol.junglerumble.co.uk/).
-- `1730......`  Meal: [Losteria](https://losteria.net/en/restaurants/restaurant/bristol/).
 
 ## Assumptions
-- You are working at Nordic's Swindon site developing PMICs.
+- You are working at Nordic.
 - You are comfortable working with Bash (or Zsh, Tcsh) on Linux.
 - You have experience in collaboratively developing code.
 - You have experience with some sort of version control before.
@@ -33,7 +31,6 @@
 - Be comfortable exploring the internals of git repositories.
 - Know how to dig yourself out of common problems with git.
 - Understand interactions between components in Nordic's system.
-- Networking/social between Nordic's Bristol and Swindon sites.
 
 ## Roundtable Introductions
 - Who are you?

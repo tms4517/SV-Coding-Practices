@@ -27,7 +27,7 @@ Git commands mostly work on these files, so let's see an example of that
 with `.git/config`.
 
 - `cat .git/config` and/or `git config user.name`
-- `git config user.name "Foo McBar"`
+- `git config user.name "Sam Smith"`
 - `cat .git/config` and/or `git config user.name`
 
 ## Git 4of11
@@ -35,7 +35,7 @@ Next, let's tell git to manage our files.
 This has two steps (add to the staging area, then the atomic commit).
 
 - `git add foo.txt bar.txt`
-- `git commit -m 'Little message about the changes.'`.
+- `git commit -m 'Little message about the changes.'`
 
 Also different from RCS is that we can always edit our working files.
 
@@ -65,8 +65,8 @@ Create a bare repository that can work like BitBucket/GitHub, then have a
 look inside.
 Do this somewhere else on the filesystem - not in the repo you've just created.
 
-- `git init --bare BriBucket`
-- `ls BriBucket/`
+- `git init --bare BitBristol`
+- `ls BitBristol/`
 
 ## Git 8of11
 Back in our original repo, we can add that as a remote for our original.
@@ -75,22 +75,25 @@ We're using the name `bb`, but BitBucket and GitHub suggest the name
 You can use whatever alias you like - it's your choice and doesn't affect
 anybody else.
 
-- `git remote add bb path/to/BriBucket`
+- `git remote add bb path/to/BitBristol`
 
-Note that this does nothing to BriBucket yet.
+Note that this does nothing to BitBristol yet.
 When we push our original repo, that's when the network access occurs.
 
 - `git push bb master`
 
-Now have a look around BriBucket where you can see that the contents
+Now have a look around BitBristol where you can see that the contents
 of `objects/` is identical to those in our local copy.
 You can add as many remotes as you like, name them however you like, and
 synchronise them however you like.
 
 ## Git 9of11
-To see a nice overview, you can use the included GUIs for working with local
+To see a nice overview, you can use the standard GUIs for working with local
 changes and seeing what your local repo knows about other repos.
 Let's have a quick look now.
+Both `git gui` and `gitk`, implemented in Tcl/Tk, are included in the usual
+distributions of Git and provide a consistent interface on Linux, BSDs, MacOS,
+and Windows.
 
 - `git gui &`
 - `gitk --all &`

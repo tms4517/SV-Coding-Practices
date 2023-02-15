@@ -18,14 +18,14 @@
 
 ## BitBucket 2of2
 - Hooks prevent rewriting history, like amending pushed commits.
-- Hooks enforce branch naming scheme.
+- Hooks enforce branch our naming scheme.
 - Markdown is rendered on all web views.
   - README, commit messages, pull requests
 - PDF is also viewable in the web browser, but not DOCX.
 - SVG,PNG,JPG are rendered, but not VSDX.
   - SVG can be diffed -- [Inkscape](https://inkscape.org/) is recommended for
     most diagrams and [Wavedrom](https://wavedrom.com/) for waveforms.
-  - Visio obfuscates SVG -- Avoid!
+  - Visio obfuscates SVG!
 
 ## NoRRIS 1of2
 - It's a SemVer constraint solver.
@@ -41,7 +41,7 @@
 - You've used SemVer constraint solvers before - in package managers like
   `apt` (Debian), `rpm` (RHEL/CentOS), `cargo` (Rust), `pip` (Python).
   - **Compliance with SemVer is essential!**
-- Use NoRRIS to avoid the difficult and error-prone process of writing XML.
+- Use NoRRIS to avoid the error-prone process of writing XML.
 - YAML (`abc/requirements.yaml`) as input, XML (`abc/YourIp.xml`) as output.
 - YAML should be hand-written.
 - XML is used by dogit to specify dependencies.
@@ -63,7 +63,7 @@
   - A git repo on BitBucket which has a file `.../abc/Foo.xml`.
 - "workspace"
   - A directory, `${VC_WORKSPACE}`, created and owned by you.
-  - Contains a configuration files `.recipe`.
+  - Contains a configuration file `.recipe`.
   - Created using `dogit ip|projectbranch|product`.
 - "projectbranch"
   - A name for git branches, which is common to many repos.
