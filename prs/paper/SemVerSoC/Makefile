@@ -1,6 +1,6 @@
 
 .PHONY: default
-default: SemVerRtl.pdf
+default: SemVerSoC.pdf
 
 DATE_ISO8601 := $(shell date +"%Y-%m-%d")
 TIME_ISO8601 := $(shell date +"%H:%M:%S")
