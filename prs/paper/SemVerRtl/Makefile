@@ -21,18 +21,19 @@ PANDOC_FLAGS += --variable=papersize:a4
 # Minor tweaks for nicer formatting of PDF.
 %.intermediateTex.md: %.md
 	sed \
-		-e 's/MAJOR/{\color{red}MAJOR}/' \
-		-e 's/MINOR/{\color{orange}MINOR}/' \
-		-e 's/PATCH/{\color{blue}PATCH}/' \
+		-e 's/^### \(.* Cheatsheet\)$$/\\clearpage\n### \1/' \
+		-e 's/MAJOR/\\textcolor{red}{MAJOR}/' \
+		-e 's/MINOR/\\textcolor{orange}{MINOR}/' \
+		-e 's/PATCH/\\textcolor{Purple}{PATCH}/' \
+		-e 's/| add |/| \\colorbox{blue}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{white}{add}}} |/' \
+		-e 's/| rem |/| \\colorbox{red}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{white}{rem}}} |/' \
+		-e 's/| mod |/| \\colorbox{yellow}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{black}{mod}}} |/' \
+		-e 's/| any |/| \\colorbox{white}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{black}{any}}} |/' \
 		$*.md > $@
 
-#%.pdf: %.intermediateTex.md
-#	pandoc -i $*.intermediateTex.md \
-#
-
-%.pdf: %.md
+%.pdf: %.intermediateTex.md
 	@pandoc --version
-	pandoc -i $*.md \
+	pandoc -i $*.intermediateTex.md \
 		${PANDOC_FLAGS} \
 		-o $@
 

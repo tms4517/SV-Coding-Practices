@@ -99,7 +99,7 @@ following changes:
   Existing code using that port will not elaborate unchanged.
 - Modified signal port datatype, e.g. `logic [1:0][7:0]` $\to$ `logic [15:0]`.
   Existing code may depend on the size and structure of the port datatype, and
-  input expressions may be cast to an unexpected width or type.
+  input expressions may be cast to an unexpected width or datatype.
 - Modified signal port name, e.g. `i_operands` $\to$ `i_numbers`.
   Existing code using the name `i_operands` will not elaborate unchanged.
 - Removed interface port, e.g. ~~`ifc_APB`~~.
@@ -141,8 +141,7 @@ following changes:
 - Modified software-accessible register reset value, e.g. `32'd5` $\to$
   `32'd0`.
   Existing system software accessing the register will not operate
-  equivalently, particularly software performing non-atomic
-  [read-modify-write](https://en.wikipedia.org/wiki/Read-modify-write)
+  equivalently, particularly software performing non-atomic read-modify-write
   operations on startup like `cfg->operation++`.
   Exception: Changes to match previously published documentation, i.e. bug
   fixes, may only warrant a MINOR increment.
@@ -163,10 +162,10 @@ additions:
 
 - Added parameter port, e.g. `ANOTHER`.
   Existing code will elaborate unchanged.
-- Modified parameter port type, e.g. `int` to `bit [3:0]`, including removal of
-  the explicit type.
+- Modified parameter port datatype, e.g. `int` to `bit [3:0]`, including
+  removal of the explicit datatype.
   Existing code may elaborate unchanged, but override values may be cast to
-  an unexpected width or type.
+  an unexpected width or datatype.
   If existing code needs changes to elaborate with the updated version, then
   increment MAJOR instead.
 - Added signal port, e.g. `output o_another`.
@@ -228,45 +227,43 @@ are allowed within a PATCH increment version.
 - Any human-only comment, e.g. `/* Isn't this nice */`.
 
 
-\clearpage
+### SemVer for SystemVerilog Cheatsheet
 
-### Quick Reference Table
-
-| How | What                            | Increment |
-|:---:|:--------------------------------|:---------:|
-| mod | Top-level module name           | MAJOR     |
-| add | Parameter port                  | MINOR     |
-| rem | Parameter port                  | MAJOR     |
-| mod | Parameter port kind             | MAJOR     |
-| mod | Parameter port type             | MINOR     |
-| mod | Parameter port name             | MAJOR     |
-| mod | Parameter port default value    | MAJOR     |
-| add | Signal port                     | MINOR     |
-| rem | Signal port                     | MAJOR     |
-| mod | Signal port direction           | MINOR     |
-| mod | Signal port nettype             | MINOR     |
-| mod | Signal port datatype            | MAJOR     |
-| mod | Signal port name                | MAJOR     |
-| add | Interface port                  | MINOR     |
-| rem | Interface port                  | MAJOR     |
-| mod | Interface port type             | MAJOR     |
-| mod | Interface port name             | MAJOR     |
-| any | Internal constant               | PATCH     |
-| any | Combinatorial signal            | PATCH     |
-| add | Sequential signal               | PATCH     |
-| rem | Sequential signal               | MAJOR     |
-| mod | Sequential signal name          | MAJOR     |
-| mod | Sequential signal type          | MINOR     |
-| mod | Sequential signal expression    | MINOR     |
-| any | Hierarchy middle layer          | MAJOR     |
-| add | Hierarchy bottom layer          | MINOR     |
-| mod | Hierarchy bottom layer          | MAJOR     |
-| rem | Hierarchy bottom layer          | MAJOR     |
-| any | Tool command comment            | MAJOR     |
-| any | Status tracker comment          | PATCH     |
-| any | Human-only comment              | PATCH     |
-| add | Software register               | MINOR     |
-| rem | Software register               | MAJOR     |
-| mod | Software register address       | MAJOR     |
-| mod | Software register field layout  | MAJOR     |
-| mod | Software register reset value   | MAJOR     |
+| How | What                            | Min. Incr. |
+|:---:|:--------------------------------|:----------:|
+| mod | Top-level module name           | MAJOR      |
+| add | Parameter port                  | MINOR      |
+| rem | Parameter port                  | MAJOR      |
+| mod | Parameter port kind             | MAJOR      |
+| mod | Parameter port datatype         | MINOR      |
+| mod | Parameter port name             | MAJOR      |
+| mod | Parameter port default value    | MAJOR      |
+| add | Signal port                     | MINOR      |
+| rem | Signal port                     | MAJOR      |
+| mod | Signal port direction           | MINOR      |
+| mod | Signal port nettype             | MINOR      |
+| mod | Signal port datatype            | MAJOR      |
+| mod | Signal port name                | MAJOR      |
+| add | Interface port                  | MINOR      |
+| rem | Interface port                  | MAJOR      |
+| mod | Interface port type             | MAJOR      |
+| mod | Interface port name             | MAJOR      |
+| any | Internal constant               | PATCH      |
+| any | Combinatorial signal            | PATCH      |
+| add | Sequential signal               | PATCH      |
+| rem | Sequential signal               | MAJOR      |
+| mod | Sequential signal name          | MAJOR      |
+| mod | Sequential signal datatype      | MINOR      |
+| mod | Sequential signal expression    | MINOR      |
+| any | Hierarchy middle layer          | MAJOR      |
+| add | Hierarchy bottom layer          | MINOR      |
+| mod | Hierarchy bottom layer          | MAJOR      |
+| rem | Hierarchy bottom layer          | MAJOR      |
+| any | Tool command comment            | MAJOR      |
+| any | Status tracker comment          | PATCH      |
+| any | Human-only comment              | PATCH      |
+| add | Software register               | MINOR      |
+| rem | Software register               | MAJOR      |
+| mod | Software register address       | MAJOR      |
+| mod | Software register field layout  | MAJOR      |
+| mod | Software register reset value   | MAJOR      |
