@@ -42,6 +42,15 @@ synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
 requirements including higher-level designs, high-level software, and (most
 critically) physical implementation.
+These downstream users likely have differing perspectives about what constitutes
+the most important part of the public API --
+A system-level software user might depend on the address and reset value
+of a register, but not depend on the hierarchical path to the corresponding
+DFF (because that doesn't affect their software).
+In contrast, a user working on physical implementation might view that register
+address as a minor detail, but depend on the hierarchical path of the DFF to
+ensure that it is implemented with the correct type of cell.
+
 
 ## Changes in SystemVerilog
 
@@ -51,9 +60,9 @@ with D-type flip-flops (DFFs).
 Let's say that our module `Alu` performs arithmetic operations on its inputs,
 drives known values on its outputs, and provides register access via the APB
 protocol.
-There is one configuration register called `CFG` at the address `12'h444`, with
-a reset value of `32'd5`, arranged as two fields `CFG[2:1]=OPERATION` and
-`CFG[0]=ENABLE`.
+In the most recently released version, there is one configuration register
+called `CFG` at the address `12'h444`, with a reset value of `32'd5`, arranged
+as two fields `CFG[2:1]=OPERATION` and `CFG[0]=ENABLE`.
 
 ```systemverilog
 module Alu
@@ -65,13 +74,36 @@ module Alu
   );
 
   localparam bit MYCONSTANT = 1'b1;
-  logic foo_d; // Assignment via `always_comb` or `assign`.
-  logic foo_q; // Assignment via `always_ff`.
+
+  // Combinatorial assignment via `always_comb`, `assign`,
+  // or connection to sub-module.
+  logic foo_d;
+
+  // Sequential assignment via `always_ff`.
+  logic foo_q;
 
   // ... snip ...
+
+  ArithmeticPipe u_pipeA1
+    ( .i_opA  (i_operands[3:0])
+    , .i_opB  (i_operands[7:4])
+    , .o_taps (foo_d)
+    );
+
+  always_ff @(posedge ifc_APB.clk, posedge ifc_APB.arst)
+    if (ifc_APB.arst)
+      foo_q <= '0;
+    else if (updateFoo)
+      foo_q <= foo_d;
+
+  // ... snip ...
+
 endmodule
 ```
 
+The public API of this module consists of the module header, the APB address
+map and register layout, hierarchical paths to sequential elements, and other
+packaged components like helper scripts.
 
 ### MAJOR Versions
 
@@ -109,7 +141,7 @@ following changes:
 - Modified interface port name, e.g. `ifc_APB` $\to$ `myApb`.
   Existing code using the name `ifc_APB` will not elaborate unchanged.
 - Removed or modified sequential signal name, e.g. `foo_q` $\to$ `bar_q`.
-  Existing code referencing `foo_q` will not find the inferred DFF.
+  Existing code referencing `foo_q` will not find the inferred DFF(s).
   You may not notice the breakage until your colleagues in physical
   implementation notify you that their scripts don't work.
   In the worst cases, DFFs requiring special treatment can be silently missed.
@@ -121,7 +153,8 @@ following changes:
   `Alu.u_pipeA1` $\to$ `Alu.u_pipeA[1]`.
   Existing code, particularly for physical implementation, may depend on the
   hierarchical names.
-- Any machine-readable tool command comment, e.g. `// synopsys parallel_case`.
+- Any machine-readable comment, e.g. tool-specific directives like
+  `// synopsys parallel_case`.
   Existing flows are likely to depend on these for critical functionality.
 - Removed software-accessible register, e.g. ~~`CFG`~~.
   Existing system software accessing the `CFG` address will not operate
@@ -156,9 +189,8 @@ To summarise, the MAJOR version must be incremented with any changes which
 >
 > 2. MINOR version when you add functionality in a backwards compatible manner
 
-Where SemVer specifies *adding* functionality, SoC packages must update the
-MINOR version (if not MAJOR) with any of the following modifications as well as
-additions:
+Where SemVer specifies *adding* functionality, SoC packages must update at
+least the MINOR version with any of the following modifications:
 
 - Added parameter port, e.g. `ANOTHER`.
   Existing code will elaborate unchanged.
@@ -197,6 +229,12 @@ additions:
 - Added software-accessible register, e.g. `STATUS`.
   Existing system software will not operate equivalently, and updated software
   may use the new functionality.
+
+To summarise, the MINOR version must be incremented with any changes which
+add or modify functionality in a manner which *does not require* downstream
+users to make changes.
+If downstream users are required to make changes to their project in order to
+accept the new version, increment MAJOR instead.
 
 
 ### PATCH Versions
@@ -259,7 +297,7 @@ are allowed within a PATCH increment version.
 | add | Hierarchy bottom layer          | MINOR      |
 | mod | Hierarchy bottom layer          | MAJOR      |
 | rem | Hierarchy bottom layer          | MAJOR      |
-| any | Tool command comment            | MAJOR      |
+| any | Tool directive comment          | MAJOR      |
 | any | Status tracker comment          | PATCH      |
 | any | Human-only comment              | PATCH      |
 | add | Software register               | MINOR      |
@@ -267,3 +305,4 @@ are allowed within a PATCH increment version.
 | mod | Software register address       | MAJOR      |
 | mod | Software register field layout  | MAJOR      |
 | mod | Software register reset value   | MAJOR      |
+

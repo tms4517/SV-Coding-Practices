@@ -21,6 +21,7 @@ PANDOC_FLAGS += --variable=papersize:a4
 # Minor tweaks for nicer formatting of PDF.
 %.intermediateTex.md: %.md
 	sed \
+		-e 's/^## \(Changes in .*\)$$/\\clearpage\n## \1/' \
 		-e 's/^### \(.* Cheatsheet\)$$/\\clearpage\n### \1/' \
 		-e 's/MAJOR/\\textcolor{red}{MAJOR}/' \
 		-e 's/MINOR/\\textcolor{orange}{MINOR}/' \
