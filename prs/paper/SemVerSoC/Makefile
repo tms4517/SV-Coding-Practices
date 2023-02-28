@@ -26,6 +26,7 @@ PANDOC_FLAGS += --variable=papersize:a4
 		-e 's/MAJOR/\\textcolor{red}{MAJOR}/' \
 		-e 's/MINOR/\\textcolor{orange}{MINOR}/' \
 		-e 's/PATCH/\\textcolor{Purple}{PATCH}/' \
+		-e 's/^\(#\{1,\}\) \\[a-z]\{1,\}{[a-zA-Z]\{1,\}}{\([A-Z]\{1,\}\)}/\1 \2/' \
 		-e 's/| add |/| \\colorbox{blue}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{white}{add}}} |/' \
 		-e 's/| rem |/| \\colorbox{red}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{white}{rem}}} |/' \
 		-e 's/| mod |/| \\colorbox{yellow}{\\makebox[3em][c]{\\rule[0pt]{0pt}{0.7em}\\textcolor{black}{mod}}} |/' \

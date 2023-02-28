@@ -267,8 +267,8 @@ are allowed within a PATCH increment version.
 
 ### SemVer for SystemVerilog Cheatsheet
 
-| How | What                            | Min. Incr. |
-|:---:|:--------------------------------|:----------:|
+| How | What                            | Increment  |
+|:---:|:--------------------------------|:-----------|
 | mod | Top-level module name           | MAJOR      |
 | add | Parameter port                  | MINOR      |
 | rem | Parameter port                  | MAJOR      |
