@@ -115,7 +115,7 @@ Referencing the example, the MAJOR version must be incremented with any of the
 following changes:
 
 - Modified module name which integrators use to declare an instance of the
-  peripheral, e.g. `Alu` $\to$ `MyAritmetic`.
+  peripheral, e.g. `Alu` $\to$ `MyArithmetic`.
   Existing code using the name `Alu` will not elaborate unchanged.
 - Removed parameter port, e.g. ~~`RESULT_W`~~.
   Existing code overriding the parameter value will not elaborate unchanged.
