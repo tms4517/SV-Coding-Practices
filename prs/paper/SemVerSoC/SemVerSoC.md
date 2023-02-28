@@ -3,7 +3,7 @@
 
 ## Overview
 
-SoC packages are similar to sofware in many ways, e.g. the are written in
+SoC packages are similar to sofware in many ways, e.g. they are written in
 human-readable computer languages and often use version control systems, but
 differ in what comprises an "API".
 This is an addendum to the [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
