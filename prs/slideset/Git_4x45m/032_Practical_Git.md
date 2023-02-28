@@ -8,8 +8,8 @@
 ## Git 2of11
 Let's start by making a couple of files to play with...
 
-- `echo -e 'hello\nworld' > foo.txt`
-- `echo -e 'red\nblue' > bar.txt`
+- `printf 'hello\nworld\n' > foo.txt`
+- `printf 'red\nblue\n' > bar.txt`
 - `ls -al`
 
 ... and initialising the repository.

@@ -8,8 +8,8 @@
 ## RCS 2of4
 Let's start by making a couple of files to play with.
 
-- `echo -e 'hello\nworld' > foo.txt`
-- `echo -e 'red\nblue' > bar.txt`
+- `printf 'hello\nworld\n' > foo.txt`
+- `printf 'red\nblue\n' > bar.txt`
 - `ls -al ./ RCS/`
 
 And provide a place for RCS to keep its data.
