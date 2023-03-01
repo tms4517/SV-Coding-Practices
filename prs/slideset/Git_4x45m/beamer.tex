@@ -430,7 +430,15 @@ $if(institute)$
 \institute{$if(copyright)$\textcopyright\hspace*{1mm}$endif$$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
 $if(classification)$
+\usepackage{etoolbox}
 \renewcommand{\classification}{$classification$}
+\renewcommand{\ClassificationCorner}[1]{
+    \ifstrequal{$classification$}{INTERNAL}{\path[fill=ColorClassificationInternal]}{
+    \ifstrequal{$classification$}{CONFIDENTIAL}{\path[fill=ColorClassificationConfidential]}{
+    \ifstrequal{$classification$}{STRICTLY CONFIDENTIAL}{\path[fill=ColorClassificationStrictlyconfidential]}{
+    \path[fill=ColorLightBlue]
+    }}}
+}
 $endif$
 $if(titlegraphic)$
 \titlegraphic{\includegraphics{$titlegraphic$}}
