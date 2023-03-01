@@ -67,12 +67,12 @@
   - Created using `dogit ip|projectbranch|product`.
 - "projectbranch"
   - A name for git branches, which is common to many repos.
-  - An entry in the MySQL database with name and pointer to an XML.
-  - E.g. `feature/VegaDevelopment2_HM-19446`.
+  - An entry in the MySQL database with name and pointer to an XML file,
+    e.g. `feature/VegaDevelopment2_HM-19446`.
 - "product"
   - A workspace configuration (`.recipe`) file that is tracked in the
-    [Dogit Support repo](https://projecttools.nordicsemi.no/bitbucket/projects/SIG-DOGIT/repos/methodology_designkit_scripts_dogit--support/browse/recipes).
-  - E.g. `VegaSOC1`, `HaltiumSuper`, `Moonlight`.
+    [Dogit Support repo](https://projecttools.nordicsemi.no/bitbucket/projects/SIG-DOGIT/repos/methodology_designkit_scripts_dogit--support/browse/recipes),
+    e.g. `VegaSOC1`, `HaltiumSuper`, `Moonlight`.
 - "cache" a read-only NFS disk containing all in-use git repos.
   - `/pro/dogit/archive/gitrocache5/`
 
