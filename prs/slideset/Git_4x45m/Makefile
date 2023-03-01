@@ -5,6 +5,8 @@ SRC_MD ?= $(shell find . -maxdepth 1 -regex '\./[0-9]+.*\.md' | sort)
 default: ${PDF}
 
 PANDOC_FLAGS := -t beamer
+PANDOC_FLAGS += --variable=colorlinks
+ifdef NORDIC
 PANDOC_FLAGS += --template=beamer.tex
 PANDOC_FLAGS += --metadata="date:$(shell date '+%A %Y-%m-%d')"
 PANDOC_FLAGS += --metadata=theme:Custom
@@ -12,9 +14,9 @@ PANDOC_FLAGS += --metadata=colortheme:Custom
 PANDOC_FLAGS += --variable=copyright
 PANDOC_FLAGS += --variable="institute:Nordic Semiconductor"
 PANDOC_FLAGS += --variable="classification:INTERNAL"
-PANDOC_FLAGS += --variable=colorlinks
+endif
 ${PDF}: ${SRC_MD}
-	pandoc -t beamer ${SRC_MD} -o ${PDF}
+	pandoc ${PANDOC_FLAGS} ${SRC_MD} -o ${PDF}
 
 # For each source file containing shell commands, create the name of a target
 # file which can be sourced.
