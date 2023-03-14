@@ -40,7 +40,7 @@ SoC packages are typically written in specialised languages such as
 SystemVerilog (IEEE1800-2017) and VHDL (IEEE1076-2019) which facilitate
 synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
-requirements including higher-level designs, high-level software, and (most
+requirements related to higher-level designs, high-level software, and (most
 critically) physical implementation.
 These downstream users likely have differing perspectives about what constitutes
 the most important part of the public API --
@@ -263,6 +263,21 @@ are allowed within a PATCH increment version.
   Note, if there are updated status tracker comments, there's a good chance the
   changes also involve enough to warrant a MINOR or MAJOR increment.
 - Any human-only comment, e.g. `/* Isn't this nice */`.
+
+
+### Exemptions
+
+The public API is restricted to the reasonable ways that users are expected to
+use your release.
+In-house projects may use this restriction to avoid incrementing MAJOR too
+often, i.e. the distinction between a breaking change and a bugfix can be
+redefined if you (1) *identify **all** downstream projects/users* and (2)
+*obtain explicit agreement from **all** users*.
+This exemption allows larger SoC packages like subsystem and chip-level
+projects to make arbitrary changes under MINOR increments while reserving MAJOR
+increments for project-specific milestones.
+Only in-house projects may use this exemption because publicly available
+projects cannot identify all downstream projects/users.
 
 
 ### SemVer for SystemVerilog Cheatsheet
