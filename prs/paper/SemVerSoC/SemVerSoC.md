@@ -36,8 +36,8 @@ In command-line applications, an API includes:
 Those examples of software public APIs demonstrate that an API can be described
 more generally as *anything which a user might reasonably rely on*.
 
-SoC designs are typically written in specialised languages such as
-Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
+SoC designs are typically written in specialised languages for digital logic
+such as Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
 facilitate synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
 requirements related to higher-level designs, high-level software, and (most
@@ -52,12 +52,62 @@ address as a minor detail, but depend on the hierarchical path of the FF to
 ensure that it is implemented with the correct type of cell.
 
 
-## Rationale/discussion/what can change/Componntes of API/TODO
+## Downstream Users and Auxiliary Components
 
-TODO
+Downstream projects, i.e. those which depend on your SoC design(s), often fall
+into these categories:
 
-  Exception: Changes to match previously published documentation, i.e. bug
-  fixes, may only warrant a MINOR increment.
+1. Documentation: Describe the intention, features, and operation of your
+  design as required by other users.
+  The extent of overlap with other categories is highly specific to each
+  particular project.
+2. Integration: Include your design as a hierarchical component in a larger
+  system.
+  In SystemVerilog, this means declaring an instance of your `module` with
+  suitable connections to parameter and signal ports.
+3. Verification: Check that your design meets specifications.
+  Includes both simulation and formal methods, and checks may be written
+  in a different language from your SoC design, e.g. TCL, SystemC, or Python.
+4. Implementation: Convert your abstract design into a concrete realisation on
+  a physical ASIC or FPGA platform.
+  Includes synthesis, layout, and modifications for testability.
+5. Software: Most modern SoC designs feature some software-programmable
+  component, which will view your SoC design from a memory-mapped perspective.
+  Includes system-level tests (overlapping with verification), validation and
+  characterisation (overlapping with implementation), firmware, and possibly
+  end-user applications.
+
+In addition to the main description of digital logic, e.g. a collection of
+SystemVerilog files, a SoC design will usually include auxiliary components
+which may (or may not) correspond to additional files.
+
+- Filesystem structure of the release delivery and associated filelists.
+- Standards which the source code adheres to.
+  Includes standards of all types from file encoding (e.g. ASCII vs UTF8) and
+  whitespace/formatting rules to the specification language (e.g. Verilog vs
+  SystemVerilog) and naming conventions.
+  Other users may have flows which extract information which depend on these
+  seemingly minor details.
+- Hierarchical paths and specific identifiers.
+  Used by verification and implementation to identify and manipulate parts of
+  the design.
+  In verification, specific FFs may be forced to obtain coverage on a
+  difficult-to-reach state.
+  In implementation, specific FFs may be selected as requiring special
+  treatment to meet timing.
+- Constraints on clocks, timing, pin-mapping, cell placement, routing, etc.
+- Waivers on errors or warnings from particular tools.
+- Power intent, normally specified with UPF (IEEE1801).
+- Abstract models and unittests.
+  Other users (likely excluding implementation) may depend on these to validate
+  their own work.
+- Address map and structure of software-visible registers.
+  All types of software may depend on specific addresses, the layout of
+  register fields, and more subtle attributes like reset values and volatility.
+
+When releasing a new SoC design version, it is important to consider how your
+changes all components of the release affect all users developing downstream
+projects.
 
 
 ## Changes in SystemVerilog
@@ -183,6 +233,8 @@ following changes:
 
 To summarise, the MAJOR version must be incremented with any changes which
 *require* updates to any projects that fetch the newly released version.
+Note, changes to match the documentation of a previous release should be
+considered bug fixes, so may only warrant a MINOR increment.
 
 
 ### MINOR Versions
@@ -254,7 +306,7 @@ are allowed within a PATCH increment version.
 2. Added, removed, or modified internal combinational signal, e.g. `foo_d` $\to$
   `bar_d`.
   Internal combinational signals should not be relied upon downstream.
-  Exception: If you change special signals which are *intended* to be probed or
+  Exemption: If you change signals which are *intended* to be probed or
   forced by downstream users, increment MAJOR instead, e.g. `disableChecks`
   $\to$ `turnOffChecks`.
 3. Added internal sequential signal, e.g. `new_q`.
