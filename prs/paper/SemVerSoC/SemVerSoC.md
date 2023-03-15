@@ -1,19 +1,19 @@
 
-# Addendum to SemVer: System-on-Chip Packages
+# Addendum to SemVer: System-on-Chip Designs
 
 ## Overview
 
-SoC packages are similar to sofware in many ways, e.g. they are written in
-human-readable computer languages and often use version control systems, but
-differ in what comprises an "API".
+SoC (System-on-Chip) designs are similar to sofware in many ways, e.g. they are
+written in human-readable computer languages and often developed using version
+control, but differ in what comprises an "API".
 This is an addendum to the [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
-specification which clarifies how to apply SemVer to System-on-Chip packages.
+specification which clarifies how to apply SemVer to SoC designs.
 It is assumed that you have read and understood:
 
 - [RFC 2119](https://tools.ietf.org/html/rfc2119)
 - [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 
-The main difference between software packages and SoC packages is in what
+The main difference between software and SoC designs is in what
 constitutes a public Application Programming Interface (API).
 
 In software libraries written in the C language, an API includes:
@@ -36,9 +36,9 @@ In command-line applications, an API includes:
 Those examples of software public APIs demonstrate that an API can be described
 more generally as *anything which a user might reasonably rely on*.
 
-SoC packages are typically written in specialised languages such as
-SystemVerilog (IEEE1800-2017) and VHDL (IEEE1076-2019) which facilitate
-synthesis to physical digital logic circuits.
+SoC designs are typically written in specialised languages such as
+Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
+facilitate synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
 requirements related to higher-level designs, high-level software, and (most
 critically) physical implementation.
@@ -46,17 +46,25 @@ These downstream users likely have differing perspectives about what constitutes
 the most important part of the public API --
 A system-level software user might depend on the address and reset value
 of a register, but not depend on the hierarchical path to the corresponding
-DFF (because that doesn't affect their software).
+FF (flip-flop) because that doesn't affect their software.
 In contrast, a user working on physical implementation might view that register
-address as a minor detail, but depend on the hierarchical path of the DFF to
+address as a minor detail, but depend on the hierarchical path of the FF to
 ensure that it is implemented with the correct type of cell.
+
+
+## Rationale/discussion/what can change/Componntes of API/TODO
+
+TODO
+
+  Exception: Changes to match previously published documentation, i.e. bug
+  fixes, may only warrant a MINOR increment.
 
 
 ## Changes in SystemVerilog
 
 An illustrative example, shown in SystemVerilog, is useful to demonstrate API
 components of a typical SoC peripheral where sequential logic is implemented
-with D-type flip-flops (DFFs).
+with D-type FFs.
 Let's say that our module `Alu` performs arithmetic operations on its inputs,
 drives known values on its outputs, and provides register access via the APB
 protocol.
@@ -101,9 +109,9 @@ module Alu
 endmodule
 ```
 
-The public API of this module consists of the module header, the APB address
-map and register layout, hierarchical paths to sequential elements, and other
-packaged components like helper scripts.
+The public API of this module may consist of the module declaration, APB
+registers, hierarchical paths to sequential elements, and other packaged
+components like helper scripts and design constraints.
 
 ### MAJOR Versions
 
@@ -141,20 +149,20 @@ following changes:
 - Modified interface port name, e.g. `ifc_APB` $\to$ `myApb`.
   Existing code using the name `ifc_APB` will not elaborate unchanged.
 - Removed or modified sequential signal name, e.g. `foo_q` $\to$ `bar_q`.
-  Existing code referencing `foo_q` will not find the inferred DFF(s).
+  Existing code referencing `foo_q` will not find the inferred FF(s).
   You may not notice the breakage until your colleagues in physical
   implementation notify you that their scripts don't work.
-  In the worst cases, DFFs requiring special treatment can be silently missed.
+  In the worst cases, FFs requiring special treatment can be silently missed.
 - Any added, removed, or renamed hierarchical middle layer, e.g.
-  `Alu.u_pipeA1` $\to$ `Alu.u_wrapperA.u_pipe1`.
+  `Alu.u_pipe` $\to$ `Alu.u_wrapperA.u_pipe`.
   Existing code, particularly for physical implementation, may depend on the
-  hierarchical names.
+  hierarchical names including generate blocks.
 - Removed, or renamed hierarchical bottom layer, e.g.
-  `Alu.u_pipeA1` $\to$ `Alu.u_pipeA[1]`.
+  `Alu.u_pipe1` $\to$ `Alu.u_pipe[1]`.
   Existing code, particularly for physical implementation, may depend on the
-  hierarchical names.
-- Any machine-readable comment, e.g. tool-specific directives like
-  `// synopsys parallel_case`.
+  hierarchical names including generate loops.
+- Added, removed, or modified any machine-readable comment, e.g. tool-specific
+  directives like `// synopsys parallel_case`.
   Existing flows are likely to depend on these for critical functionality.
 - Removed software-accessible register, e.g. ~~`CFG`~~.
   Existing system software accessing the `CFG` address will not operate
@@ -163,24 +171,18 @@ following changes:
   `12'h888`.
   Existing system software accessing the address `0x444` will not operate
   equivalently.
-  Exception: Changes to match previously published documentation, i.e. bug
-  fixes, may only warrant a MINOR increment.
 - Modified software-accessible register field layout, e.g. `CFG[0]=ENABLE`
   $\to$ `CFG[31]=ENABLE`.
   Existing system software accessing the register will not operate
   equivalently.
-  Exception: Changes to match previously published documentation, i.e. bug
-  fixes, may only warrant a MINOR increment.
 - Modified software-accessible register reset value, e.g. `32'd5` $\to$
   `32'd0`.
   Existing system software accessing the register will not operate
   equivalently, particularly software performing non-atomic read-modify-write
   operations on startup like `cfg->operation++`.
-  Exception: Changes to match previously published documentation, i.e. bug
-  fixes, may only warrant a MINOR increment.
 
 To summarise, the MAJOR version must be incremented with any changes which
-*require* updates to any projects that fetch your updated module.
+*require* updates to any projects that fetch the newly released version.
 
 
 ### MINOR Versions
@@ -189,7 +191,7 @@ To summarise, the MAJOR version must be incremented with any changes which
 >
 > 2. MINOR version when you add functionality in a backwards compatible manner
 
-Where SemVer specifies *adding* functionality, SoC packages must update at
+Where SemVer specifies *adding* functionality, SoC designs must update at
 least the MINOR version with any of the following modifications:
 
 - Added parameter port, e.g. `ANOTHER`.
@@ -222,7 +224,7 @@ least the MINOR version with any of the following modifications:
 - Modified sequential signal datatype or expression, e.g. `logic [1:0] foo_q`
   $\to$ `FooEnum_t foo_q`.
   Backwards-compatible changes only require a MINOR increment, but incompatible
-  changes like reducing the *intended* width of a DFF vector require a MAJOR
+  changes like reducing the *intended* width of a FF vector require a MAJOR
   increment.
 - Added hierarchical bottom layer, e.g. `Alu.u_pipeA2`.
   New hierarchy implies new functionality, not just a bug fix.
@@ -256,7 +258,7 @@ are allowed within a PATCH increment version.
   forced by downstream users, increment MAJOR instead, e.g. `disableChecks`
   $\to$ `turnOffChecks`.
 - Added internal sequential signal, e.g. `new_q`.
-  Additional DFFs will affect area, power, achieveable fmax and cost, but are
+  Additional FFs will affect area, power, achieveable fmax and cost, but are
   unlikely to break physical implementation flows outright.
   Note, removed or renamed internal signals require a MAJOR increment.
 - Any machine-readable status tracker comment, e.g. `/* TODO: Something */`.
@@ -273,7 +275,7 @@ In-house projects may use this restriction to avoid incrementing MAJOR too
 often, i.e. the distinction between a breaking change and a bugfix can be
 redefined if you (1) *identify **all** downstream projects/users* and (2)
 *obtain explicit agreement from **all** users*.
-This exemption allows larger SoC packages like subsystem and chip-level
+This exemption allows larger SoC designs like subsystem and chip-level
 projects to make arbitrary changes under MINOR increments while reserving MAJOR
 increments for project-specific milestones.
 Only in-house projects may use this exemption because publicly available
