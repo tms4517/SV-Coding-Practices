@@ -6,11 +6,15 @@ style of a report.
 
 `ifdef VERILATOR
 `define NO_ASSIGNMENT_TO_INPUT
+`define NO_OUTPUT_SHORT
 `endif
 
 `ifdef QUESTA
 `define INOUT_MUST_BE_NET
 `define ILLEGAL_REFERENCE_TO_NET
+`define NO_OUTPUT_SHORT
+`define NO_MULTI_CONTINUOUS
+`define RUNTIME_CONTINUOUS_PROCEDURAL
 `endif
 
 `ifdef XCELIUM
@@ -18,9 +22,10 @@ style of a report.
 `define ILLEGAL_REFERENCE_TO_NET
 `define MULTIDRIVE_CONFLICT
 `define ALWAYSCOMB_UNEVAL_TIME0
+`define NO_OUTPUT_SHORT
 `endif
 
-module M_continuous
+module Continuous // {{{
   ( input  logic      i_logic
   , input  var logic  i_var_logic
   , input  tri logic  i_tri_logic
@@ -58,9 +63,9 @@ module M_continuous
   assign b_tri_logic = 1'b1;
   assign b_wire_logic = 1'b1;
 
-endmodule
+endmodule // }}} Continuous
 
-module M_procedural
+module Procedural // {{{
   ( input  logic      i_logic
   , input  var logic  i_var_logic
   , input  tri logic  i_tri_logic
@@ -108,16 +113,18 @@ module M_procedural
   always_comb b_wire_logic = 1'b1;
 `endif
 
-endmodule
+endmodule // }}} Procedural
 
+// All ports on all instances are assigned from within to 1'b1.
+// u_internal_* -> All ports unconnected.
+// u_external_* -> All ports connected to 1'b0.
 module parent (
 `ifndef VERILATOR
   input var logic i_clk, i_rst
 `endif
 );
 
-  // Internal assignments only, so all ports are unconnected.
-  M_continuous u_internal_continuous
+  Continuous u_internal_continuous // {{{
     ( .i_logic        ()
     , .i_var_logic    ()
     , .i_tri_logic    ()
@@ -134,8 +141,9 @@ module parent (
 `endif
     , .b_tri_logic    ()
     , .b_wire_logic   ()
-    );
-  M_procedural u_internal_procedural
+    ); // }}}
+
+  Procedural u_internal_procedural // {{{
     ( .i_logic        ()
     , .i_var_logic    ()
     , .i_tri_logic    ()
@@ -152,7 +160,57 @@ module parent (
 `endif
     , .b_tri_logic    ()
     , .b_wire_logic   ()
-    );
+    ); // }}}
+
+/* verilator lint_off PINMISSING */
+  Continuous u_external_continuous // {{{
+    ( .i_logic        (1'b0)
+`ifndef NO_MULTI_CONTINUOUS
+    , .i_var_logic    (1'b0)
+`endif
+    , .i_tri_logic    (1'b0)
+    , .i_wire_logic   (1'b0)
+
+`ifndef NO_OUTPUT_SHORT
+    , .o_logic        (1'b0)
+    , .o_var_logic    (1'b0)
+    , .o_tri_logic    (1'b0)
+    , .o_wire_logic   (1'b0)
+`endif
+
+`ifndef NO_OUTPUT_SHORT
+    , .b_logic        (1'b0)
+    , .b_var_logic    (1'b0)
+    , .b_tri_logic    (1'b0)
+    , .b_wire_logic   (1'b0)
+`endif
+    ); // }}}
+/* verilator lint_on PINMISSING */
+
+/* verilator lint_off PINMISSING */
+  Procedural u_external_procedural // {{{
+    ( .i_logic        (1'b0)
+`ifndef RUNTIME_CONTINUOUS_PROCEDURAL
+    , .i_var_logic    (1'b0)
+`endif
+    , .i_tri_logic    (1'b0)
+    , .i_wire_logic   (1'b0)
+
+`ifndef NO_OUTPUT_SHORT
+    , .o_logic        (1'b0)
+    , .o_var_logic    (1'b0)
+    , .o_tri_logic    (1'b0)
+    , .o_wire_logic   (1'b0)
+`endif
+
+`ifndef NO_OUTPUT_SHORT
+    , .b_logic        (1'b0)
+    , .b_var_logic    (1'b0)
+    , .b_tri_logic    (1'b0)
+    , .b_wire_logic   (1'b0)
+`endif
+    ); // }}}
+/* verilator lint_on PINMISSING */
 
   integer fd;
   initial begin: l_report
@@ -295,6 +353,119 @@ module parent (
     $fdisplay(fd, "    u_internal_procedural.b_wire_logic=%b", u_internal_procedural.b_wire_logic);
     $fdisplay(fd, "");
     // }}} Internal assignments
+
+    $fdisplay(fd, "");
+    $fdisplay(fd, "External assignments, i.e. outwith child module"); // {{{
+    $fdisplay(fd, " continuous");
+    $fdisplay(fd, "  input");
+    $fdisplay(fd, "    $typename(u_external_continuous.i_logic)=%s", $typename(u_external_continuous.i_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.i_logic)=%0d", $size(u_external_continuous.i_logic));
+    $fdisplay(fd, "    u_external_continuous.i_logic=%b", u_external_continuous.i_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.i_var_logic)=%s", $typename(u_external_continuous.i_var_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.i_var_logic)=%0d", $size(u_external_continuous.i_var_logic));
+`ifndef MULTIDRIVE_CONFLICT
+    $fdisplay(fd, "    u_external_continuous.i_var_logic=%b", u_external_continuous.i_var_logic);
+`endif
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.i_tri_logic)=%s", $typename(u_external_continuous.i_tri_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.i_tri_logic)=%0d", $size(u_external_continuous.i_tri_logic));
+    $fdisplay(fd, "    u_external_continuous.i_tri_logic=%b", u_external_continuous.i_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.i_wire_logic)=%s", $typename(u_external_continuous.i_wire_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.i_wire_logic)=%0d", $size(u_external_continuous.i_wire_logic));
+    $fdisplay(fd, "    u_external_continuous.i_wire_logic=%b", u_external_continuous.i_wire_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "  output");
+    $fdisplay(fd, "    $typename(u_external_continuous.o_logic)=%s", $typename(u_external_continuous.o_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.o_logic)=%0d", $size(u_external_continuous.o_logic));
+    $fdisplay(fd, "    u_external_continuous.o_logic=%b", u_external_continuous.o_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.o_var_logic)=%s", $typename(u_external_continuous.o_var_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.o_var_logic)=%0d", $size(u_external_continuous.o_var_logic));
+    $fdisplay(fd, "    u_external_continuous.o_var_logic=%b", u_external_continuous.o_var_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.o_tri_logic)=%s", $typename(u_external_continuous.o_tri_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.o_tri_logic)=%0d", $size(u_external_continuous.o_tri_logic));
+    $fdisplay(fd, "    u_external_continuous.o_tri_logic=%b", u_external_continuous.o_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.o_wire_logic)=%s", $typename(u_external_continuous.o_wire_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.o_wire_logic)=%0d", $size(u_external_continuous.o_wire_logic));
+    $fdisplay(fd, "    u_external_continuous.o_wire_logic=%b", u_external_continuous.o_wire_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "  inout");
+    $fdisplay(fd, "    $typename(u_external_continuous.b_logic)=%s", $typename(u_external_continuous.b_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.b_logic)=%0d", $size(u_external_continuous.b_logic));
+    $fdisplay(fd, "    u_external_continuous.b_logic=%b", u_external_continuous.b_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.b_var_logic)=%s", $typename(u_external_continuous.b_var_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.b_var_logic)=%0d", $size(u_external_continuous.b_var_logic));
+    $fdisplay(fd, "    u_external_continuous.b_var_logic=%b", u_external_continuous.b_var_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.b_tri_logic)=%s", $typename(u_external_continuous.b_tri_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.b_tri_logic)=%0d", $size(u_external_continuous.b_tri_logic));
+    $fdisplay(fd, "    u_external_continuous.b_tri_logic=%b", u_external_continuous.b_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_continuous.b_wire_logic)=%s", $typename(u_external_continuous.b_wire_logic));
+    $fdisplay(fd, "    $size(u_external_continuous.b_wire_logic)=%0d", $size(u_external_continuous.b_wire_logic));
+    $fdisplay(fd, "    u_external_continuous.b_wire_logic=%b", u_external_continuous.b_wire_logic);
+    $fdisplay(fd, " procedural");
+    $fdisplay(fd, "  input");
+    $fdisplay(fd, "    $typename(u_external_procedural.i_logic)=%s", $typename(u_external_procedural.i_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.i_logic)=%0d", $size(u_external_procedural.i_logic));
+    $fdisplay(fd, "    u_external_procedural.i_logic=%b", u_external_procedural.i_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.i_var_logic)=%s", $typename(u_external_procedural.i_var_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.i_var_logic)=%0d", $size(u_external_procedural.i_var_logic));
+`ifndef MULTIDRIVE_CONFLICT
+    $fdisplay(fd, "    u_external_procedural.i_var_logic=%b", u_external_procedural.i_var_logic);
+`endif
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.i_tri_logic)=%s", $typename(u_external_procedural.i_tri_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.i_tri_logic)=%0d", $size(u_external_procedural.i_tri_logic));
+    $fdisplay(fd, "    u_external_procedural.i_tri_logic=%b", u_external_procedural.i_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.i_wire_logic)=%s", $typename(u_external_procedural.i_wire_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.i_wire_logic)=%0d", $size(u_external_procedural.i_wire_logic));
+    $fdisplay(fd, "    u_external_procedural.i_wire_logic=%b", u_external_procedural.i_wire_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "  output");
+    $fdisplay(fd, "    $typename(u_external_procedural.o_logic)=%s", $typename(u_external_procedural.o_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.o_logic)=%0d", $size(u_external_procedural.o_logic));
+    $fdisplay(fd, "    u_external_procedural.o_logic=%b", u_external_procedural.o_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.o_var_logic)=%s", $typename(u_external_procedural.o_var_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.o_var_logic)=%0d", $size(u_external_procedural.o_var_logic));
+    $fdisplay(fd, "    u_external_procedural.o_var_logic=%b", u_external_procedural.o_var_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.o_tri_logic)=%s", $typename(u_external_procedural.o_tri_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.o_tri_logic)=%0d", $size(u_external_procedural.o_tri_logic));
+    $fdisplay(fd, "    u_external_procedural.o_tri_logic=%b", u_external_procedural.o_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.o_wire_logic)=%s", $typename(u_external_procedural.o_wire_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.o_wire_logic)=%0d", $size(u_external_procedural.o_wire_logic));
+    $fdisplay(fd, "    u_external_procedural.o_wire_logic=%b", u_external_procedural.o_wire_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "  inout");
+`ifndef INOUT_MUST_BE_NET
+    $fdisplay(fd, "    $typename(u_external_procedural.b_logic)=%s", $typename(u_external_procedural.b_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.b_logic)=%0d", $size(u_external_procedural.b_logic));
+    $fdisplay(fd, "    u_external_procedural.b_logic=%b", u_external_procedural.b_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.b_var_logic)=%s", $typename(u_external_procedural.b_var_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.b_var_logic)=%0d", $size(u_external_procedural.b_var_logic));
+    $fdisplay(fd, "    u_external_procedural.b_var_logic=%b", u_external_procedural.b_var_logic);
+    $fdisplay(fd, "");
+`endif
+    $fdisplay(fd, "    $typename(u_external_procedural.b_tri_logic)=%s", $typename(u_external_procedural.b_tri_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.b_tri_logic)=%0d", $size(u_external_procedural.b_tri_logic));
+    $fdisplay(fd, "    u_external_procedural.b_tri_logic=%b", u_external_procedural.b_tri_logic);
+    $fdisplay(fd, "");
+    $fdisplay(fd, "    $typename(u_external_procedural.b_wire_logic)=%s", $typename(u_external_procedural.b_wire_logic));
+    $fdisplay(fd, "    $size(u_external_procedural.b_wire_logic)=%0d", $size(u_external_procedural.b_wire_logic));
+    $fdisplay(fd, "    u_external_procedural.b_wire_logic=%b", u_external_procedural.b_wire_logic);
+    $fdisplay(fd, "");
+    // }}} External assignments
 
     $fclose(fd);
     $finish();
