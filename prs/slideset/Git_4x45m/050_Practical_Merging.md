@@ -20,8 +20,8 @@
 8. Nordic's BitBucket branch naming scheme.
 
 ## Preliminary 1of8: Examples with IntroProject
-- Create a new workspace to work on the `IntroProject` IP.
-  - `cd /work/${USER}/`
+- Create a new directory to work on the `IntroProject` IP.
+  - `cd GTN/afternoon/`
   - `dogit ip IntroProject`
   - `cd ./Workspace_IntroProject/ip/IntroProject/`
   - `vc && tools`
@@ -64,6 +64,8 @@
 - `git merge`: Resolve conflicts with `git mergetool`.
   - `git config --global merge.tool kdiff3`
 
+Note: `--global` changes `~/.gitconfig`, instead of `./.git/config`
+
 ## Preliminary 4of8: Stashing
 - A handy tool for digging yourself out of a mess.
 - Save uncommited and unstaged changes temporarily.
@@ -73,11 +75,11 @@
   - Pop with `git stash pop`
 - Let's try that quickly by making a change, then attempting to pull.
   - `echo BREAKTHINGS >> ./rtl/IntroProject.sv`
-  - `git pull`
-- For the pull to succeed, tracked files must be unmodified.
+  - `git pull --rebase`
+- For a rebasing pull to succeed, tracked files must be unmodified.
   Save our change onto the stash stack.
   - `git stash`
-  - `git pull`
+  - `git pull --rebase`
 - Now we can get our change back.
   - `git stash pop`
 
@@ -117,19 +119,19 @@
 - `git rebase`: Take the series of commit patches and apply them to rewrite the
   branch's history.
   - Rewriting history is not allowed on Nordic's BitBucket setup.
+    In Nordic's setup, you'll rarely (if ever) use the rebase command.
 - `git pull`: Execute `git fetch` then `git merge` (or `git rebase`).
   - If you're unsure, use separate steps for fetching and merging.
-  - In Nordic's setup, you'll rarely (if ever) use the rebase mode.
 
 ## Preliminary 8of8: Nordic's Branch Naming Scheme
 - In Nordic's setup, you can only push branches with names adhering to the
   [scheme](https://projecttools.nordicsemi.no/confluence/display/SIG/Revision+Control#RevisionControl-Branchnamespaces)
    defined in our pre-receive hooks.
-  - `feature/[free text]_JIRAKEY-1234`
-  - `bugfix/[free text]_JIRAKEY-1234`
-  - `playground/[free text]`
+  - `feature/<free text>_JIRAKEY-1234`
+  - `bugfix/<free text>_JIRAKEY-1234`
+  - `playground/<free text>`
 - Let's try to push a branch with non-compliant name.
-  - `git checkout -b feature/noJira
+  - `git checkout -b feature/noJira`
   - `git push --set-upstream origin feature/noJira`
 - We'll use the `playground` namespace today.
 - NOTE: The information on Confluence is currently wrong!

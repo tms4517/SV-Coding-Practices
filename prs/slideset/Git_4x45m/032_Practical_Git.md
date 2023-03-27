@@ -8,6 +8,7 @@
 ## Git 2of11
 Let's start by making a couple of files to play with...
 
+- `cd GTN/morningGit/`
 - `printf 'hello\nworld\n' > foo.txt`
 - `printf 'red\nblue\n' > bar.txt`
 - `ls -al`
@@ -65,6 +66,7 @@ Create a bare repository that can work like BitBucket/GitHub, then have a
 look inside.
 Do this somewhere else on the filesystem - not in the repo you've just created.
 
+- `cd GTN/morningSomewhereElse/`
 - `git init --bare BitBristol`
 - `ls BitBristol/`
 
@@ -75,6 +77,7 @@ We're using the name `bb`, but BitBucket and GitHub suggest the name
 You can use whatever alias you like - it's your choice and doesn't affect
 anybody else.
 
+- `cd GTN/morningGit/`
 - `git remote add bb path/to/BitBristol`
 
 Note that this does nothing to BitBristol yet.

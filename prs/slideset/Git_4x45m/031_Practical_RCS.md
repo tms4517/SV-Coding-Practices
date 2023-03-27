@@ -8,6 +8,7 @@
 ## RCS 2of4
 Let's start by making a couple of files to play with.
 
+- `cd GTN/morningRCS/`
 - `printf 'hello\nworld\n' > foo.txt`
 - `printf 'red\nblue\n' > bar.txt`
 - `ls -al ./ RCS/`
