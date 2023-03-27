@@ -6,9 +6,9 @@ default: ${PDF}
 
 PANDOC_FLAGS := -t beamer
 PANDOC_FLAGS += --variable=colorlinks
-ifdef NORDIC
 PANDOC_FLAGS += --template=beamer.tex
 PANDOC_FLAGS += --metadata="date:$(shell date '+%A %Y-%m-%d')"
+ifdef NORDIC
 PANDOC_FLAGS += --metadata=theme:Custom
 PANDOC_FLAGS += --metadata=colortheme:Custom
 PANDOC_FLAGS += --variable=copyright
