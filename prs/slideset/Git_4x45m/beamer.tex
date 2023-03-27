@@ -440,6 +440,8 @@ $if(classification)$
     }}}
 }
 $endif$
+\let\oldtexttt\texttt
+\renewcommand{\texttt}[1]{\textcolor{gray}{\small \oldtexttt{#1}}}
 $if(titlegraphic)$
 \titlegraphic{\includegraphics{$titlegraphic$}}
 $endif$
