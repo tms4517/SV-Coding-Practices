@@ -3,9 +3,10 @@
 
 ## Overview
 
-SoC (System-on-Chip) designs are similar to sofware in many ways, e.g. they are
-written in human-readable computer languages and often developed using version
-control, but differ in what comprises an "API".
+SoC (System-on-Chip) designs are similar to software in many ways, e.g. they
+are written in human-readable computer languages and often developed using
+version control, but differ in what comprises an Application Programming
+Interface (API).
 This is an addendum to the [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 specification which clarifies how to apply SemVer to SoC designs.
 It is assumed that you have read and understood:
@@ -14,7 +15,7 @@ It is assumed that you have read and understood:
 - [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 
 The main difference between software and SoC designs is in what
-constitutes a public Application Programming Interface (API).
+constitutes a public API.
 
 In software libraries written in the C language, an API includes:
 
@@ -40,16 +41,16 @@ SoC designs are typically written in specialised languages for digital logic
 such as Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
 facilitate synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
-requirements related to higher-level designs, high-level software, and (most
-critically) physical implementation.
+requirements related to higher-level designs, high-level software, and physical
+implementation.
 These downstream users likely have differing perspectives about what constitutes
 the most important part of the public API --
 A system-level software user might depend on the address and reset value
 of a register, but not depend on the hierarchical path to the corresponding
-FF (flip-flop) because that doesn't affect their software.
-In contrast, a user working on physical implementation might view that register
-address as a minor detail, but depend on the hierarchical path of the FF to
-ensure that it is implemented with the correct type of cell.
+FF (flip-flop) because that does not affect their software.
+In contrast, a user working on physical implementation might see the register
+address and reset value as trivial details, but depend on the hierarchical path
+of the FF to ensure that it is implemented with the correct type of cell.
 
 
 ## Downstream Users and Auxiliary Components
@@ -57,8 +58,8 @@ ensure that it is implemented with the correct type of cell.
 Downstream projects, i.e. those which depend on your SoC design(s), often fall
 into these categories:
 
-1. Documentation: Describe the intention, features, and operation of your
-  design as required by other users.
+1. Documentation: Describe the intention, features, operation, and limitations
+  of your design as required by other users.
   The extent of overlap with other categories is highly specific to each
   particular project.
 2. Integration: Include your design as a hierarchical component in a larger
@@ -66,10 +67,10 @@ into these categories:
   In SystemVerilog, this means declaring an instance of your `module` with
   suitable connections to parameter and signal ports.
 3. Verification: Check that your design meets specifications.
-  Includes both simulation and formal methods, and checks may be written
+  Includes both dynamic and static methods, and checks may be written
   in a different language from your SoC design, e.g. TCL, SystemC, or Python.
-4. Implementation: Convert your abstract design into a concrete realisation on
-  a physical ASIC or FPGA platform.
+4. Physical implementation: Convert your abstract design into a concrete
+  realisation on a physical ASIC or FPGA platform.
   Includes synthesis, layout, and modifications for testability.
 5. Software: Most modern SoC designs feature some software-programmable
   component, which will view your SoC design from a memory-mapped perspective.
@@ -116,8 +117,8 @@ An illustrative example, shown in SystemVerilog, is useful to demonstrate API
 components of a typical SoC peripheral where sequential logic is implemented
 with D-type FFs.
 Let's say that our module `Alu` performs arithmetic operations on its inputs,
-drives known values on its outputs, and provides register access via the APB
-protocol.
+drives known values on its outputs, and provides register access via the AMBA
+APB protocol.
 In the most recently released version, there is one configuration register
 called `CFG` at the address `12'h444`, with a reset value of `32'd5`, arranged
 as two fields `CFG[2:1]=OPERATION` and `CFG[0]=ENABLE`.
@@ -133,11 +134,11 @@ module Alu
 
   localparam bit MYCONSTANT = 1'b1;
 
-  // Combinatorial assignment via `always_comb`, `assign`,
+  // Combinatorially assigned via `always_comb`, `assign`,
   // or connection to sub-module.
   logic foo_d;
 
-  // Sequential assignment via `always_ff`.
+  // Sequentially assigned via `always_ff`.
   logic foo_q;
 
   // ... snip ...
@@ -159,7 +160,7 @@ module Alu
 endmodule
 ```
 
-The public API of this module may consist of the module declaration, APB
+The public API of this example module consists of the module declaration, APB
 registers, hierarchical paths to sequential elements, and other packaged
 components like helper scripts and design constraints.
 
