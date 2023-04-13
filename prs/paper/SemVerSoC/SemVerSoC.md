@@ -5,17 +5,14 @@
 
 SoC (System-on-Chip) designs are similar to software in many ways, e.g. they
 are written in human-readable computer languages and often developed using
-version control, but differ in what comprises an Application Programming
-Interface (API).
+version control, but differ in what comprises their public Application
+Programming Interface (API).
 This is an addendum to the [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 specification which clarifies how to apply SemVer to SoC designs.
 It is assumed that you have read and understood:
 
 - [RFC 2119](https://tools.ietf.org/html/rfc2119)
 - [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
-
-The main difference between software and SoC designs is in what
-constitutes a public API.
 
 In software libraries written in the C language, an API includes:
 
@@ -37,7 +34,7 @@ In command-line applications, an API includes:
 Those examples of software public APIs demonstrate that an API can be described
 more generally as *anything which a user might reasonably rely on*.
 
-SoC designs are typically written in specialised languages for digital logic
+SoC designs are typically written in specialized languages for digital logic
 such as Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
 facilitate synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
@@ -70,12 +67,12 @@ into these categories:
   Includes both dynamic and static methods, and checks may be written
   in a different language from your SoC design, e.g. TCL, SystemC, or Python.
 4. Physical implementation: Convert your abstract design into a concrete
-  realisation on a physical ASIC or FPGA platform.
-  Includes synthesis, layout, and modifications for testability.
+  realization on a physical ASIC or FPGA platform.
+  Includes synthesis, layout, and modifications for testing.
 5. Software: Most modern SoC designs feature some software-programmable
   component, which will view your SoC design from a memory-mapped perspective.
   Includes system-level tests (overlapping with verification), validation and
-  characterisation (overlapping with implementation), firmware, and possibly
+  characterization (overlapping with implementation), firmware, and possibly
   end-user applications.
 
 In addition to the main description of digital logic, e.g. a collection of
@@ -99,7 +96,7 @@ which may (or may not) correspond to additional files.
   optimization, obfuscation, etc.
 - Waivers on errors or warnings from particular tools.
 - Power intent, normally specified with UPF (IEEE1801).
-- Abstract models and unittests.
+- Abstract models and unit tests.
   Other users (likely excluding implementation) may depend on these to validate
   their own work.
 - Address map and structure of software-visible registers.
@@ -232,7 +229,7 @@ following changes:
   equivalently, particularly software performing non-atomic read-modify-write
   operations on startup like `cfg->operation++`.
 
-To summarise, the MAJOR version must be incremented with any changes which
+To summarize, the MAJOR version must be incremented with any changes which
 *require* updates to any projects that fetch the newly released version.
 Note, changes to match the documentation of a previous release should be
 considered bug fixes, so may only warrant a MINOR increment.
@@ -285,7 +282,7 @@ Where SemVer specifies adding functionality, SoC designs must update
   Existing system software will not operate equivalently, and updated software
   may use the new functionality.
 
-To summarise, the MINOR version must be incremented with any changes which
+To summarize, the MINOR version must be incremented with any changes which
 add or modify functionality in a manner which *does not require* downstream
 users to make changes.
 If downstream users are required to make changes to their project in order to
