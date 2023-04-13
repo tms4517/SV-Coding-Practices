@@ -89,14 +89,14 @@ which may (or may not) correspond to additional files.
   SystemVerilog) and naming conventions.
   Other users may have flows which extract information which depend on these
   seemingly minor details.
-- Hierarchical paths and specific identifiers.
-  Used by verification and implementation to identify and manipulate parts of
-  the design.
+- Hierarchical paths and specific identifiers (names).
   In verification, specific FFs may be forced to obtain coverage on a
   difficult-to-reach state.
-  In implementation, specific FFs may be selected as requiring special
+  In physical implementation, specific FFs may be selected as requiring special
   treatment to meet timing.
 - Constraints on clocks, timing, pin-mapping, cell placement, routing, etc.
+- Scripts for design modification flows such as DFT, instrumentation,
+  optimization, obfuscation, etc.
 - Waivers on errors or warnings from particular tools.
 - Power intent, normally specified with UPF (IEEE1801).
 - Abstract models and unittests.
@@ -106,9 +106,9 @@ which may (or may not) correspond to additional files.
   All types of software may depend on specific addresses, the layout of
   register fields, and more subtle attributes like reset values and volatility.
 
-When releasing a new SoC design version, it is important to consider how your
-changes all components of the release affect all users developing downstream
-projects.
+When releasing a new version of a SoC design, it is important to consider how
+changes to all components of the release will affect all users developing
+downstream projects.
 
 
 ## Changes in SystemVerilog
@@ -134,11 +134,11 @@ module Alu
 
   localparam bit MYCONSTANT = 1'b1;
 
-  // Combinatorially assigned via `always_comb`, `assign`,
+  // To be combinatorially assigned via `always_comb`, `assign`,
   // or connection to sub-module.
   logic foo_d;
 
-  // Sequentially assigned via `always_ff`.
+  // To be sequentially assigned via `always_ff`.
   logic foo_q;
 
   // ... snip ...
@@ -244,8 +244,8 @@ considered bug fixes, so may only warrant a MINOR increment.
 >
 > 2. MINOR version when you add functionality in a backwards compatible manner
 
-Where SemVer specifies *adding* functionality, SoC designs must update at
-least the MINOR version with any of the following modifications:
+Where SemVer specifies adding functionality, SoC designs must update
+*at least* the MINOR version with any of the following modifications:
 
 1. Added parameter port, e.g. `ANOTHER`.
   Existing code will elaborate unchanged.
@@ -314,7 +314,7 @@ are allowed within a PATCH increment version.
   Additional FFs will affect area, power, achieveable fmax and cost, but are
   unlikely to break physical implementation flows outright.
   Note, removed or renamed internal signals require a MAJOR increment.
-4. Any machine-readable status tracker comment, e.g. `/* TODO: Something */`.
+4. Any machine-readable tracker comment, e.g. `/* TODO: Something */`.
   Note, if there are updated status tracker comments, there's a good chance the
   changes also involve enough to warrant a MINOR or MAJOR increment.
 5. Any human-only comment, e.g. `/* Isn't this nice */`.
@@ -324,13 +324,14 @@ are allowed within a PATCH increment version.
 
 The public API is restricted to the reasonable ways that users are expected to
 use your release.
-In-house projects may use this restriction to avoid incrementing MAJOR too
-often, i.e. the distinction between a breaking change and a bugfix can be
-redefined if you (1) *identify **all** downstream projects/users* and (2)
-*obtain explicit agreement from **all** users*.
-This exemption allows larger SoC designs like subsystem and chip-level
-projects to make arbitrary changes under MINOR increments while reserving MAJOR
-increments for project-specific milestones.
+[In-house](https://en.wikipedia.org/wiki/In-house_software) projects may use
+this restriction to avoid incrementing MAJOR too often, i.e. the distinction
+between a breaking change and a bugfix can be redefined if you
+(1) *identify **all** downstream projects/users* and
+(2) *obtain explicit agreement from **all** users*.
+This exemption allows large subsystem and chip-level projects to make arbitrary
+changes under MINOR increments while reserving MAJOR increments for
+project-specific milestones.
 Only in-house projects may use this exemption because publicly available
 projects cannot identify all downstream projects/users.
 
