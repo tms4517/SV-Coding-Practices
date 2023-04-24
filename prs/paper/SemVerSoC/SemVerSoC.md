@@ -3,10 +3,11 @@
 
 ## Overview
 
-SoC (System-on-Chip) designs are similar to software in many ways, e.g. they
-are written in human-readable computer languages and often developed using
-version control, but differ in what comprises their public Application
-Programming Interface (API).
+SoC ([System-on-Chip](https://en.wikipedia.org/wiki/System_on_a_chip)) designs
+are similar to software in many ways, e.g. they are written in human-readable
+computer languages and often developed using version control, but differ in
+what comprises their public Application Programming Interface
+([API](https://en.wikipedia.org/wiki/API)).
 This is an addendum to the [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 specification which clarifies how to apply SemVer to SoC designs.
 It is assumed that you have read and understood:
@@ -35,8 +36,10 @@ Those examples of software public APIs demonstrate that an API can be described
 more generally as *anything which a user might reasonably rely on*.
 
 SoC designs are typically written in specialized languages for digital logic
-such as Verilog (IEEE1364), SystemVerilog (IEEE1800), or VHDL (IEEE1076) which
-facilitate synthesis to physical digital logic circuits.
+such as [Verilog](https://en.wikipedia.org/wiki/Verilog) (IEEE Std 1364),
+[SystemVerilog](https://en.wikipedia.org/wiki/SystemVerilog) (IEEE Std 1800),
+or [VHDL](https://en.wikipedia.org/wiki/VHDL) (IEEE Std 1076)
+which facilitate synthesis to physical digital logic circuits.
 Different from software, SoC designs have users with fundamentally different
 requirements related to higher-level designs, high-level software, and physical
 implementation.
@@ -44,7 +47,8 @@ These downstream users likely have differing perspectives about what constitutes
 the most important part of the public API --
 A software user might depend on the address and reset value
 of a register, but not depend on the hierarchical path to the corresponding
-FF (flip-flop) because that does not affect their software.
+FF ([flip-flop](https://en.wikipedia.org/wiki/Flip-flop_(electronics))) because
+that does not affect their software.
 In contrast, a user working on physical implementation might see the register
 address and reset value as trivial details, but depend on the hierarchical path
 of the FF to ensure that it is implemented with the correct type of cell.
