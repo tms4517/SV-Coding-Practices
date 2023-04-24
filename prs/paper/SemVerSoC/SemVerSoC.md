@@ -209,21 +209,24 @@ following changes:
   `Alu.u_pipe1` $\to$ `Alu.u_pipe[1]`.
   Existing code, particularly for physical implementation, may depend on the
   hierarchical names including generate loops.
-15. Added, removed, or modified any machine-readable comment, e.g. tool-specific
-  directives like `// synopsys parallel_case`.
+15. Removed or functionally modified package function.
+  Higher-level designs may depend on any aspect of a function in a supplied
+  package at elaboration time, simulation time, and in synthesis.
+16. Added, removed, or modified any machine-readable comment, e.g.
+  tool-specific directives like `// synopsys parallel_case`.
   Existing flows are likely to depend on these for critical functionality.
-16. Removed software-accessible register, e.g. ~~`CFG`~~.
+17. Removed software-accessible register, e.g. ~~`CFG`~~.
   Existing system software accessing the `CFG` address will not operate
   equivalently.
-17. Modified software-accessible register address, e.g. `12'h444` $\to$
+18. Modified software-accessible register address, e.g. `12'h444` $\to$
   `12'h888`.
   Existing system software accessing the address `0x444` will not operate
   equivalently.
-18. Modified software-accessible register field layout, e.g. `CFG[0]=ENABLE`
+19. Modified software-accessible register field layout, e.g. `CFG[0]=ENABLE`
   $\to$ `CFG[31]=ENABLE`.
   Existing system software accessing the register will not operate
   equivalently.
-19. Modified software-accessible register reset value, e.g. `32'd5` $\to$
+20. Modified software-accessible register reset value, e.g. `32'd5` $\to$
   `32'd0`.
   Existing system software accessing the register will not operate
   equivalently, particularly software performing non-atomic read-modify-write
@@ -277,7 +280,9 @@ Where SemVer specifies adding functionality, SoC designs must update
   increment.
 8. Added hierarchical bottom layer, e.g. `Alu.u_pipeA2`.
   New hierarchy implies new functionality, not just a bug fix.
-9. Added software-accessible register, e.g. `STATUS`.
+9. Added package function, e.g. `function bit isPrime (int x);`.
+  A new function implies new functionality, not just a bug fix.
+10. Added software-accessible register, e.g. `STATUS`.
   Existing system software will not operate equivalently, and updated software
   may use the new functionality.
 
@@ -310,10 +315,15 @@ are allowed within a PATCH increment version.
   Additional FFs will affect area, power, achievable fmax and cost, but are
   unlikely to break physical implementation flows outright.
   Note, removed or renamed internal signals require a MAJOR increment.
-4. Any machine-readable tracker comment, e.g. `/* TODO: Something */`.
-  Note, if there are updated status tracker comments, there's a good chance the
-  changes also involve enough to warrant a MINOR or MAJOR increment.
-5. Any human-only comment, e.g. `/* Isn't this nice */`.
+4. Non-functionally modified package function, e.g. to improve simulation
+   performance without affecting its
+   [domain, codomain](https://en.wikipedia.org/wiki/Function_(mathematics)), or
+   [image](https://en.wikipedia.org/wiki/Image_(mathematics)).
+5. Any [tag comment](https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags),
+  e.g. `/* TODO: Something */`.
+  Note, where changes include updates to tag comments, there's a good chance
+  the changes also involve enough to warrant a MINOR or MAJOR increment.
+6. Any human-only comment, e.g. `/* Isn't this nice */`.
 
 
 ### Exemptions
@@ -364,6 +374,9 @@ projects cannot identify all downstream projects/users.
 | add | Hierarchy bottom layer          | MINOR                |
 | mod | Hierarchy bottom layer          | MAJOR                |
 | rem | Hierarchy bottom layer          | MAJOR                |
+| add | Package function                | MINOR                |
+| rem | Package function                | MAJOR                |
+| mod | Package function behavior       | PATCH                |
 | any | Tool directive comment          | MAJOR                |
 | any | Tag comment                     | PATCH                |
 | any | Human-only comment              | PATCH                |
