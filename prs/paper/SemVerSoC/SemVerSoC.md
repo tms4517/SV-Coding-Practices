@@ -42,7 +42,7 @@ requirements related to higher-level designs, high-level software, and physical
 implementation.
 These downstream users likely have differing perspectives about what constitutes
 the most important part of the public API --
-A system-level software user might depend on the address and reset value
+A software user might depend on the address and reset value
 of a register, but not depend on the hierarchical path to the corresponding
 FF (flip-flop) because that does not affect their software.
 In contrast, a user working on physical implementation might see the register
@@ -52,8 +52,8 @@ of the FF to ensure that it is implemented with the correct type of cell.
 
 ## Downstream Users and Auxiliary Components
 
-Downstream projects, i.e. those which depend on your SoC design(s), often fall
-into these categories:
+Downstream projects, i.e. those which depend on your SoC design(s), usually
+fall into these categories:
 
 1. Documentation: Describe the intention, features, operation, and limitations
   of your design as required by other users.
@@ -69,8 +69,8 @@ into these categories:
 4. Physical implementation: Convert your abstract design into a concrete
   realization on a physical ASIC or FPGA platform.
   Includes synthesis, layout, and modifications for testing.
-5. Software: Most modern SoC designs feature some software-programmable
-  component, which will view your SoC design from a memory-mapped perspective.
+5. Software: Most modern SoC designs feature some programmable
+  components which view your system from a memory-mapped perspective.
   Includes system-level tests (overlapping with verification), validation and
   characterization (overlapping with implementation), firmware, and possibly
   end-user applications.
@@ -255,8 +255,7 @@ Where SemVer specifies adding functionality, SoC designs must update
 3. Added signal port, e.g. `output o_another`.
   Existing code may elaborate unchanged and a new signal port implies new
   functionality.
-4. Modified signal port direction, e.g. `myport` $\to$ `output myport`.
-  Default direction is `inout`.
+4. Modified signal port direction, e.g. `inout myport` $\to$ `output myport`.
   Existing code may elaborate unchanged, but simulation semantics may be
   different.
   If existing code needs changes to elaborate with the updated version, then
@@ -308,7 +307,7 @@ are allowed within a PATCH increment version.
   forced by downstream users, increment MAJOR instead, e.g. `disableChecks`
   $\to$ `turnOffChecks`.
 3. Added internal sequential signal, e.g. `new_q`.
-  Additional FFs will affect area, power, achieveable fmax and cost, but are
+  Additional FFs will affect area, power, achievable fmax and cost, but are
   unlikely to break physical implementation flows outright.
   Note, removed or renamed internal signals require a MAJOR increment.
 4. Any machine-readable tracker comment, e.g. `/* TODO: Something */`.
@@ -335,42 +334,42 @@ projects cannot identify all downstream projects/users.
 
 ### SemVer for SystemVerilog Cheatsheet
 
-| How | What                            | Increment  |
-|:---:|:--------------------------------|:-----------|
-| mod | Top-level module name           | MAJOR      |
-| add | Parameter port                  | MINOR      |
-| rem | Parameter port                  | MAJOR      |
-| mod | Parameter port kind             | MAJOR      |
-| mod | Parameter port datatype         | MINOR      |
-| mod | Parameter port name             | MAJOR      |
-| mod | Parameter port default value    | MAJOR      |
-| add | Signal port                     | MINOR      |
-| rem | Signal port                     | MAJOR      |
-| mod | Signal port direction           | MINOR      |
-| mod | Signal port nettype             | MINOR      |
-| mod | Signal port datatype            | MAJOR      |
-| mod | Signal port name                | MAJOR      |
-| add | Interface port                  | MINOR      |
-| rem | Interface port                  | MAJOR      |
-| mod | Interface port type             | MAJOR      |
-| mod | Interface port name             | MAJOR      |
-| any | Internal constant               | PATCH      |
-| any | Combinatorial signal            | PATCH      |
-| add | Sequential signal               | PATCH      |
-| rem | Sequential signal               | MAJOR      |
-| mod | Sequential signal name          | MAJOR      |
-| mod | Sequential signal datatype      | MINOR      |
-| mod | Sequential signal expression    | MINOR      |
-| any | Hierarchy middle layer          | MAJOR      |
-| add | Hierarchy bottom layer          | MINOR      |
-| mod | Hierarchy bottom layer          | MAJOR      |
-| rem | Hierarchy bottom layer          | MAJOR      |
-| any | Tool directive comment          | MAJOR      |
-| any | Status tracker comment          | PATCH      |
-| any | Human-only comment              | PATCH      |
-| add | Software register               | MINOR      |
-| rem | Software register               | MAJOR      |
-| mod | Software register address       | MAJOR      |
-| mod | Software register field layout  | MAJOR      |
-| mod | Software register reset value   | MAJOR      |
+| How | What                            | Increment (at least) |
+|:---:|:--------------------------------|:---------------------|
+| mod | Top-level module name           | MAJOR                |
+| add | Parameter port                  | MINOR                |
+| rem | Parameter port                  | MAJOR                |
+| mod | Parameter port kind             | MAJOR                |
+| mod | Parameter port datatype         | MINOR                |
+| mod | Parameter port name             | MAJOR                |
+| mod | Parameter port default value    | MAJOR                |
+| add | Signal port                     | MINOR                |
+| rem | Signal port                     | MAJOR                |
+| mod | Signal port direction           | MINOR                |
+| mod | Signal port nettype             | MINOR                |
+| mod | Signal port datatype            | MAJOR                |
+| mod | Signal port name                | MAJOR                |
+| add | Interface port                  | MINOR                |
+| rem | Interface port                  | MAJOR                |
+| mod | Interface port type             | MAJOR                |
+| mod | Interface port name             | MAJOR                |
+| any | Internal constant               | PATCH                |
+| any | Combinatorial signal            | PATCH                |
+| add | Sequential signal               | PATCH                |
+| rem | Sequential signal               | MAJOR                |
+| mod | Sequential signal name          | MAJOR                |
+| mod | Sequential signal datatype      | MINOR                |
+| mod | Sequential signal expression    | MINOR                |
+| any | Hierarchy middle layer          | MAJOR                |
+| add | Hierarchy bottom layer          | MINOR                |
+| mod | Hierarchy bottom layer          | MAJOR                |
+| rem | Hierarchy bottom layer          | MAJOR                |
+| any | Tool directive comment          | MAJOR                |
+| any | Tag comment                     | PATCH                |
+| any | Human-only comment              | PATCH                |
+| add | Software register               | MINOR                |
+| rem | Software register               | MAJOR                |
+| mod | Software register address       | MAJOR                |
+| mod | Software register field layout  | MAJOR                |
+| mod | Software register reset value   | MAJOR                |
 
