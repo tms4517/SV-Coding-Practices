@@ -15,25 +15,15 @@ It is assumed that you have read and understood:
 - [RFC 2119](https://tools.ietf.org/html/rfc2119)
 - [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html)
 
-In software libraries written in the C language, an API includes:
-
-- Names of header files which a library user can reference via `#include`.
-- Names of preprocessor macros (defined with the `#define` directive).
-- Semantics of preprocessor macros.
-- Values of constants.
-- Names of exposed functions.
-- Order of arguments to exposed functions.
-- Anything else which a library user might reasonably rely on.
-
-In command-line applications, an API includes:
-
-- Names of command-line options, flags, and sub-commands.
-- Default values of command-line options.
-- Precedence of configuration files.
-- Anything else which an application user might reasonably rely on.
-
-Those examples of software public APIs demonstrate that an API can be described
-more generally as *anything which a user might reasonably rely on*.
+In [C](https://en.wikipedia.org/wiki/C_(programming_language)) software
+libraries, an API includes paths of header files, values of constants, names
+of exposed functions,
+and anything else which a library user might reasonably rely on.
+In command-line applications, an API includes the names of command-line options
+and their default values, precedence of configuration files,
+and anything else which an application user might reasonably rely on.
+Those examples of public APIs in software demonstrate that a public API can be
+described more generally as *anything which a user might reasonably rely on*.
 
 SoC designs are typically written in specialized languages for digital logic
 such as [Verilog](https://en.wikipedia.org/wiki/Verilog) (IEEE Std 1364),
@@ -52,6 +42,19 @@ that does not affect their software.
 In contrast, a user working on physical implementation might see the register
 address and reset value as trivial details, but depend on the hierarchical path
 of the FF to ensure that it is implemented with the correct type of cell.
+
+The public API is restricted to the reasonable ways that users are expected to
+use a release.
+[In-house](https://en.wikipedia.org/wiki/In-house_software) projects may use
+this restriction to avoid incrementing MAJOR too often, i.e. the distinction
+between a breaking change and a bugfix can be redefined if you
+(1) *identify **all** downstream projects/users* and
+(2) *obtain explicit agreement from **all** users*.
+This exemption allows large subsystem and chip-level projects to make arbitrary
+changes under MINOR increments while reserving MAJOR increments for
+project-specific milestones.
+Only in-house projects may use this exemption because publicly available
+projects cannot identify all downstream projects/users.
 
 
 ## Downstream Users and Auxiliary Components
@@ -328,22 +331,6 @@ are allowed within a PATCH increment version.
   Note, where changes include updates to tag comments, there's a good chance
   the changes also involve enough to warrant a MINOR or MAJOR increment.
 6. Any human-only comment, e.g. `/* Isn't this nice */`.
-
-
-### Exemptions
-
-The public API is restricted to the reasonable ways that users are expected to
-use your release.
-[In-house](https://en.wikipedia.org/wiki/In-house_software) projects may use
-this restriction to avoid incrementing MAJOR too often, i.e. the distinction
-between a breaking change and a bugfix can be redefined if you
-(1) *identify **all** downstream projects/users* and
-(2) *obtain explicit agreement from **all** users*.
-This exemption allows large subsystem and chip-level projects to make arbitrary
-changes under MINOR increments while reserving MAJOR increments for
-project-specific milestones.
-Only in-house projects may use this exemption because publicly available
-projects cannot identify all downstream projects/users.
 
 
 ### SemVer for SystemVerilog Cheatsheet
