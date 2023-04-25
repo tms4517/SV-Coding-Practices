@@ -19,7 +19,8 @@ In [C](https://en.wikipedia.org/wiki/C_(programming_language)) software
 libraries, an API includes paths of header files, values of constants, names
 of exposed functions,
 and anything else which a library user might reasonably rely on.
-In command-line applications, an API includes the names of command-line options
+In [command-line](https://en.wikipedia.org/wiki/Command-line_interface)
+applications, an API includes the names of command-line options
 and their default values, precedence of configuration files,
 and anything else which an application user might reasonably rely on.
 Those examples of public APIs in software demonstrate that a public API can be
@@ -59,8 +60,9 @@ projects cannot identify all downstream projects/users.
 
 ## Downstream Users and Auxiliary Components
 
-Downstream projects, i.e. those which depend on your SoC design(s), usually
-fall into these categories:
+[Downstream](https://en.wikipedia.org/wiki/Downstream_(software_development))
+projects, i.e. those which depend on your SoC design(s), usually fall into
+these categories:
 
 1. Documentation: Describe the intention, features, operation, and limitations
   of your design as required by other users.
@@ -88,7 +90,9 @@ which may (or may not) correspond to additional files.
 
 - Filesystem structure of the release delivery and associated filelists.
 - Standards which the source code adheres to.
-  Includes standards of all types from file encoding (e.g. ASCII vs UTF8) and
+  Includes standards of all types from file encoding (e.g.
+  [ASCII](https://en.wikipedia.org/wiki/ASCII) vs
+  [UTF-8](https://en.wikipedia.org/wiki/UTF-8)) and
   whitespace/formatting rules to the specification language (e.g. Verilog vs
   SystemVerilog) and naming conventions.
   Other users may have flows which extract information which depend on these
@@ -99,10 +103,12 @@ which may (or may not) correspond to additional files.
   In physical implementation, specific FFs may be selected as requiring special
   treatment to meet timing.
 - Constraints on clocks, timing, pin-mapping, cell placement, routing, etc.
-- Scripts for design modification flows such as DFT, instrumentation,
+- Scripts for design modification flows such as
+  [DFT](https://en.wikipedia.org/wiki/Design_for_testing), instrumentation,
   optimization, obfuscation, etc.
 - Waivers on errors or warnings from particular tools.
-- Power intent, normally specified with UPF (IEEE1801).
+- Power intent, normally specified with
+  [UPF](https://en.wikipedia.org/wiki/Unified_Power_Format) (IEEE Std 1801).
 - Abstract models and unit tests.
   Other users (likely excluding implementation) may depend on these to validate
   their own work.
