@@ -418,6 +418,8 @@ $endif$
 $if(verbatim-in-note)$
 \VerbatimFootnotes % allow verbatim text in footnotes
 $endif$
+\usepackage{enumitem}
+\setlist[description]{leftmargin=0pt,before=\bfseries}
 \hypersetup{
 $if(title-meta)$
   pdftitle={$title-meta$},

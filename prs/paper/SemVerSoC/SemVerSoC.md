@@ -383,3 +383,133 @@ are allowed within a PATCH increment version.
 | mod | Software register field layout  | MAJOR                |
 | mod | Software register reset value   | MAJOR                |
 
+
+## FAQ
+
+1 -
+: I don't want to increment MAJOR every time I do a little refactoring.
+Should internal signal names really be considered part of the public API?
+
+A common point of confusion is that SoC design is not the same as software.
+The SoC design process (at the [RTL](https://en.wikipedia.org/wiki/Register_transfer_language)
+level) sits somewhere between the design processes for software and high-volume
+hardware like injection moulds or [PCB](https://en.wikipedia.org/wiki/Printed_circuit_board)s.
+High-volume manufacturing processes require extreme rigor in even the tiniest
+change because an subtle unnoticed mistake can quickly cost a huge amount of
+wasted resources.
+In general, software development processes are considerably more relaxed
+because fixes can be deployed relatively easily to downstream users.
+
+The fundamental difference is that software can be safely divided into discrete
+layers of abstraction, i.e. a web developer writing a JavaScript function has
+little need to care about the exact sequence of CPU instructions used to
+execute it.
+This is because the software ecosystem has such well-defined abstractions that
+JavaScript's environment perfectly follows a set of rules based on digital
+Boolean logic, so the effects of any change can be fully predicted and
+contained.
+Physical hardware is much more complex.
+For example, let's say a PCB designer wishes to move a capacitor;
+Electrically, there are no changes so verification could seem trivial, however,
+downstream users might notice that the change affects EMI compliance, heat
+distribution, weight distribution, manufacturability, and mechanical dimensions
+that they depend on.
+The physical world is considerably more difficult, perhaps impossible, to
+partition into neat layers of abstraction, so designers of physical products
+need to have awareness of a much wider range of possible effects on downstream
+users.
+
+SoC designs in RTL are typically close to physical hardware so downstream
+users working on synthesis and layout will frequently (and necessarily) depend
+on things like the names of internal signals, which might be unexpected to
+engineers from software backgrounds.
+These differences are also reflected in RTL languages:
+For example, SystemVerilog does not have keywords like `public` or `private`.
+The closest thing is `protected` which only applies to `class`es, i.e. only in
+the context of non-synthesizable code.
+
+If this all seems too restrictive, there are a few points worth clarifying:
+
+1. SemVer [item 4](https://semver.org/#spec-item-4) notes that MAJOR version
+   zero is for initial development, anything may change between MINOR and PATCH
+   increments, and the public API *should not* be condsidered stable.
+   If you're still in the stage of development where refactoring and renaming
+   changes are frequent, then the design isn't yet stable so just keep the
+   MAJOR at zero until you're satisfied that the design doesn't need regular
+   "tidying".
+2. SemVer also has FAQ points
+   ([here](https://semver.org/#doesnt-this-discourage-rapid-development-and-fast-iteration),
+   [here](https://semver.org/#if-even-the-tiniest-backwards-incompatible-changes-to-the-public-api-require-a-major-version-bump-wont-i-end-up-at-version-4200-very-rapidly),
+   and [here](https://semver.org/#documenting-the-entire-public-api-is-too-much-work))
+   noting that part of your responsibility (to your users) is to communicate
+   effectively about changes which might cause them unexpected and unplanned
+   work.
+3. If you're adamant that signal names are not part of the public API, it is
+   sufficient to simply state this in documentation and/or release notes.
+   For example, "Synthesis scripts should not depend on an signal matching the
+   regular expression `.*_d`".
+
+
+2 -
+: My design depends on other designs which use SemVer.
+Do I need to increment MAJOR for every dependency update?
+
+- If your changes pull in an incompatible dependency, i.e. it's MAJOR has
+  increased, then yes because that incompatibility can break things for your
+  users.
+- If you're using a version control like git, you don't need to make a release
+  for each depedency individually, just like you wouldn't make a release from
+  every commit.
+  As a responsible developer, your releases should be planned and the effects
+  of any changes should be understood.
+- Similar to the previous question, you can class any part of your design as
+  private simply by stating so in documentation and/or release notes, but the
+  default stance for SoC designs is that everything is considered public.
+
+
+3 -
+: In my project, we plan our releases such that MAJOR indicates architectural
+updates, MINOR indicates new features, and PATCH indicates bugfixes.
+How do these rules apply?
+
+It's great to have a well-written plan so that users know what key features
+to expect as your project progresses, and it's nice that you provide a
+consistent way of communicating project progress.
+However, that is not Semantic Versioning.
+
+Semantic Versioning is a scheme for communicating functional compatibility
+between releases, not about communicating project progress.
+Alternative schemes may appear cosmetically similar to SemVer (by using the
+format `MAJOR.MINOR.PATCH`) but not adhere to the same rules.
+By stating that your project uses SemVer, you're making a set of promises to
+your downstream users, most notably that they should be able to pull in MINOR
+and PATCH increments without *any* integration work.
+
+These are some of the things that SemVer numbers do *not* convey:
+
+- How the release corresponds to a project plan.
+- The quality or completeness of any aspect.
+- What features are included or excluded.
+- How much effort was involved, e.g. the number of
+  [man-month](https://en.wikipedia.org/wiki/The_Mythical_Man-Month)s.
+- The size of the changes, e.g. the number of changed lines.
+- How much smaller/faster/neater/better the new release is.
+- Whether the release is stable for one set of users, e.g. verification, versus
+  another set of users, e.g. physical implementation.
+
+Adhering to SemVer only communicates, very coarsely, how much work is mandatory
+for downstream users moving from one version to another.
+
+
+4 -
+: My project wants to make regular releases from parallel branches of
+development.
+How can we use SemVer?
+
+The most important thing is to communicate clearly and precisely what that
+means to your users, otherwise they might see their flows unexpectedly breaking
+and get annoyed with you.
+If the development branches diverge significantly, you can consider
+splitting the project into a "core" and higher-level "variants" which include
+the core.
+
