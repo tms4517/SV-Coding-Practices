@@ -1,15 +1,16 @@
 
 .PHONY: default
 default: SemVerSoC.pdf
+default: index.html
 
 DATE_ISO8601 := $(shell date +"%Y-%m-%d")
 TIME_ISO8601 := $(shell date +"%H:%M:%S")
 DATETIME_ISO8601 := ${DATE_ISO8601}T${TIME_ISO8601}
 
 PANDOC_FLAGS := -f markdown
-#PANDOC_FLAGS += --metadata "title=Addendum to SemVer: System-on-Chip Packages"
-#PANDOC_FLAGS += --metadata "author=Dave McEwan"
-#PANDOC_FLAGS += --metadata "date=${DATETIME_ISO8601}"
+PANDOC_FLAGS += --metadata "title=Addendum to SemVer: System-on-Chip Designs"
+PANDOC_FLAGS += --metadata "author=Dave McEwan"
+PANDOC_FLAGS += --metadata "date=${DATETIME_ISO8601}"
 PANDOC_FLAGS += --metadata "keywords=SemVer"
 PANDOC_FLAGS += --metadata "keywords=SoC"
 PANDOC_FLAGS += --metadata "keywords=SystemVerilog"
@@ -37,8 +38,31 @@ PANDOC_FLAGS += --variable=papersize:a4
 %.pdf: %.intermediateTex.md
 	@pandoc --version
 	pandoc -i $*.intermediateTex.md \
+		--template template.latex \
 		${PANDOC_FLAGS} \
 		-o $@
+
+# Minor tweaks for nicer formatting of HTML.
+%.intermediateHtml.md: %.md
+	sed \
+		-e 's@MAJOR@<span class="MAJOR">MAJOR</span>@' \
+		-e 's@MINOR@<span class="MINOR">MINOR</span>@' \
+		-e 's@PATCH@<span class="PATCH">PATCH</span>@' \
+		-e 's@| add |@| <span class="ch chAdd">add</span> |@' \
+		-e 's@| rem |@| <span class="ch chRem">rem</span> |@' \
+		-e 's@| mod |@| <span class="ch chMod">mod</span> |@' \
+		-e 's@| any |@| <span class="ch chAny">any</span> |@' \
+		$*.md > $@
+
+%.html: %.intermediateHtml.md
+	@pandoc --version
+	pandoc -i $*.intermediateHtml.md \
+		--template template.html \
+		${PANDOC_FLAGS} \
+		-o $@
+
+index.html: SemVerSoC.html
+	cp SemVerSoC.html $@
 
 .PHONY: clean
 clean:
