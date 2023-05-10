@@ -92,15 +92,15 @@ Garbage in, garbage out.
 - Remote/server events: `pre-receive`, `update`, `post-receive`
 - Must be setup per repository.
 
-## SemVer
+## SemVer and SemVerSoC
 - <https://semver.org/>
-- Specification of version numbering scheme.
 - `<major>.<minor>.<patch>-<pre-release>+<build>`
-- Version numbers and the way they change have convey meaning.
-- Ordering defined to be valid *only* on the major, minor, patch numbers.
+- Version numbers and the way they change have convey well-defined meaning -
+  that tools can rely on.
 - Used for many/most open-source projects.
-- Used as basis for Nordic's internal IP/HDN releases.
 - ...See the tiny webpage...
+- Nordic's internal IP/HDN releases should use
+  [SemVerSoC](https://davemcewan.github.io/SemVerSoC/).
 
 ## CI/CD
 - CI: Continuous Integration

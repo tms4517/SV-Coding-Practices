@@ -29,7 +29,7 @@
 
 ## NoRRIS 1of2
 - It's a SemVer constraint solver.
-  - **Compliance with SemVer is essential!**
+  - **Compliance with SemVer/SemVerSoC is essential!**
 - Tightly integrated with BitBucket and SIG's repo structure.
 - The [manual](https://projecttools.nordicsemi.no/confluence/display/QPDA/NoRRIS+Manual)
   is detailed and has video tutorials.
@@ -40,7 +40,7 @@
 ## NoRRIS 2of2
 - You've used SemVer constraint solvers before - in package managers like
   `apt` (Debian), `rpm` (RHEL/CentOS), `cargo` (Rust), `pip` (Python).
-  - **Compliance with SemVer is essential!**
+  - **Compliance with SemVer/SemVerSoC is essential!**
 - Use NoRRIS to avoid the error-prone process of writing XML.
 - YAML (`abc/requirements.yaml`) as input, XML (`abc/YourIp.xml`) as output.
 - YAML should be hand-written.
