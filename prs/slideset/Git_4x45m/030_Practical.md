@@ -9,4 +9,4 @@
   - `mkdir -p GTN/morningGit GTN/morningSomewhereElse`
   - `mkdir -p GTN/afternoon`
 2. `unset noclobber` or `set +o noclobber`
-3. Look inside `~/${USER}/.gitconfig` if it exists.
+3. Look inside `~/.gitconfig` if it exists.

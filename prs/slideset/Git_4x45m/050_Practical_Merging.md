@@ -14,9 +14,9 @@
 2. Non-merge vs merge commits.
 3. GUIs.
 4. Stashing.
-5. Reset vs revert.
+5. `reset` vs `revert`.
 6. Commit message format.
-7. Fetch, merge, rebase, and pull.
+7. `fetch`, `merge`, `rebase`, and `pull`.
 8. Nordic's BitBucket branch naming scheme.
 
 ## Preliminary 1of8: Examples with IntroProject
@@ -83,7 +83,7 @@ Note: `--global` changes `~/.gitconfig`, instead of `./.git/config`
 - Now we can get our change back.
   - `git stash pop`
 
-## Preliminary 5of8: Reset vs Revert
+## Preliminary 5of8: `reset` vs `revert`
 - To undo unwanted changes that aren't commited, reset all tracked files.
   - `git reset --hard`
 - That puts your working repo back to `HEAD`.
@@ -98,11 +98,10 @@ Note: `--global` changes `~/.gitconfig`, instead of `./.git/config`
 
 ## Preliminary 6of8: Commit Message Format
 - De-facto format supported by BitBucket, GitHub, 3rd-party tools, etc.
-- All lines contain less than or equal to 50 UTF-8 characters.
-- First line is a subject.
-- Second line is empty.
-- Subsequent lines are the body.
-- Subject is in imperitive mood, i.e. a command.
+- First line is a subject, up to 50 characters.
+- Second line is empty/blank.
+- Subsequent lines are the body, up to 72 characters.
+- Subject is in imperitive mood, i.e. commanding.
   - Good: "_Add_ support for Foo."
   - Bad: "_Adds_ support for Foo."
 - Alternatively, if the commit is very simple and doesn't need a body, word

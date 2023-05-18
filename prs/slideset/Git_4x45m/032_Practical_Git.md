@@ -62,7 +62,7 @@ are immediately comparable to RCS.
 
 ## Git 7of11
 Now let's have a look at the distributed and decentralised features.
-Create a bare repository that can work like BitBucket/GitHub, then have a
+Create a *bare* repository that can work like BitBucket/GitHub, then have a
 look inside.
 Do this somewhere else on the filesystem - not in the repo you've just created.
 
@@ -110,9 +110,11 @@ as merging the changes from a branch on a remote repo - just fetch first.
 - `echo apples >> foo.txt && git add . && git commit -m 'Add apples.'`
 - `git checkout master && git checkout -b secondBranch`
 - `echo oranges >> foo.txt && git add . && git commit -m 'Add oranges.'`
+
+Finally, return our working directory to the HEAD of `master`.
+
 - `git checkout master`
 
-Now our working directory is pointing at the HEAD of master.
 
 ## Git 11of11
 We'll try merging the first branch, then the second.
@@ -123,7 +125,7 @@ We'll try merging the first branch, then the second.
 That didn't work because, in the second merge, changes had been made to the
 same part of the file touched by a commit since their common ancestor.
 We could also have made this conflict by adding the "apples" line directly
-on the master branch.
+on the `master` branch.
 
 To fix the conflict, we need to choose what is right.
 The simplest way to do this is to accept either change using `git gui`,
